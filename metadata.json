@@ -1,0 +1,6 @@
+{
+  "name": "Aisle",
+  "description": "Agent-readable merchant catalog with deterministic price lock and AI buyer under spend mandate for Razorpay AI Buildathon.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
