@@ -19,7 +19,7 @@ def test_tool_definitions_schema_invariant():
     assert "unit_price" not in props
     assert "discount" not in props
     assert "discount_pct" not in props
-    print("✓ Invariant 2 enforced in LLM tool definition schema.")
+    print("  [OK] Invariant 2 enforced in LLM tool definition schema.")
 
 def test_buyer_run_fallback_simulation():
     """
@@ -75,7 +75,7 @@ def test_buyer_run_fallback_simulation():
         ).first()
         assert fallback_log is not None
         assert "SIMULATE_GROQ_DOWN_TOGGLE_ACTIVE" in fallback_log.reason
-        print(f"✓ Found audit_log row with event_type='fallback_triggered': {fallback_log.reason}")
+        print(f"  [OK] Found audit_log row with event_type='fallback_triggered': {fallback_log.reason}")
 
 def test_buyer_run_env_var_fallback():
     """
@@ -94,7 +94,7 @@ def test_buyer_run_env_var_fallback():
         assert data["fallback_triggered"] is True
         assert data["mode"] == "RULE_BASED_FALLBACK"
         assert data["checkout"]["status"].upper() == "CAPTURED"
-        print("✓ Verified environment variable SIMULATE_GROQ_DOWN=1 triggers deterministic fallback buyer.")
+        print("  [OK] Verified environment variable SIMULATE_GROQ_DOWN=1 triggers deterministic fallback buyer.")
     finally:
         os.environ.pop("SIMULATE_GROQ_DOWN", None)
 

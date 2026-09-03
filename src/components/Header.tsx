@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, RotateCcw, Lock, Zap, AlertCircle, ShieldAlert } from 'lucide-react';
+import { ShieldCheck, RotateCcw, Lock, Zap, AlertCircle, ShieldAlert, Workflow } from 'lucide-react';
 import { SpendMandate } from '../types';
 
 interface HeaderProps {
@@ -8,8 +8,8 @@ interface HeaderProps {
   isResetting: boolean;
   onLockAll: () => void;
   isLockingAll: boolean;
-  activeView: 'catalog' | 'buyer' | 'commerce' | 'lab';
-  onSelectView: (view: 'catalog' | 'buyer' | 'commerce' | 'lab') => void;
+  activeView: 'catalog' | 'buyer' | 'commerce' | 'lab' | 'architecture';
+  onSelectView: (view: 'catalog' | 'buyer' | 'commerce' | 'lab' | 'architecture') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -89,6 +89,17 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <ShieldAlert className="w-3.5 h-3.5 text-red-400" />
           <span>Security Lab</span>
+        </button>
+        <button
+          onClick={() => onSelectView('architecture')}
+          className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+            activeView === 'architecture'
+              ? 'bg-[#3395FF] text-white shadow-md shadow-blue-500/20'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+          }`}
+        >
+          <Workflow className="w-3.5 h-3.5 text-blue-400" />
+          <span>Architecture</span>
         </button>
       </div>
 

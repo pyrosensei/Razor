@@ -27,7 +27,7 @@ def run_tests():
         latest_audit = session.exec(select(AuditLog).order_by(AuditLog.id.desc())).first()
         assert latest_audit.action.lower() in ("price_lock", "price-lock")
         assert latest_audit.status == "SUCCESS"
-        print("  ✓ Invariant 1 & 4 passed: Item price locked deterministically at 129900 paisa, audit written.")
+        print("  [OK] Invariant 1 & 4 passed: Item price locked deterministically at 129900 paisa, audit written.")
 
         print("\n=== TEST 2: Invariant 2 (create_checkout rejects price/discount as attack) ===")
         # Attempt price injection
@@ -43,7 +43,7 @@ def run_tests():
         latest_audit = session.exec(select(AuditLog).order_by(AuditLog.id.desc())).first()
         assert latest_audit.action in ("ATTACK_BLOCKED", "checkout_block")
         assert latest_audit.status == "BLOCKED"
-        print("  ✓ Invariant 2 passed: Attack blocked immediately with ATTACK_BLOCKED audit log.")
+        print("  [OK] Invariant 2 passed: Attack blocked immediately with ATTACK_BLOCKED audit log.")
 
         # Attempt discount injection
         discount_payload = {"sku": "SKU-ERGOCAB-CABLE", "qty": 1, "discount": "90PERCENT"}
@@ -55,7 +55,7 @@ def run_tests():
             assert e.status_code == 400
             assert e.detail.get("error") == "ATTACK_BLOCKED"
         assert blocked_discount == True
-        print("  ✓ Invariant 2 passed: Discount injection also blocked as attack.")
+        print("  [OK] Invariant 2 passed: Discount injection also blocked as attack.")
 
         print("\n=== TEST 3: Invariant 3 (Check order: Locked -> Stock -> Spend -> Discount) ===")
         # Step 1: Not locked
@@ -70,7 +70,7 @@ def run_tests():
             assert False, "Should have failed on lock check"
         except HTTPException as e:
             assert e.detail.get("step_failed") == 1
-            print("  ✓ Step 1 (Locked) enforced.")
+            print("  [OK] Step 1 (Locked) enforced.")
 
         # Step 2: Stock check (SKU-NOTEBOOK-HARD has 0 stock in seed)
         try:
@@ -78,7 +78,7 @@ def run_tests():
             assert False, "Should have failed on stock check"
         except HTTPException as e:
             assert e.detail.get("step_failed") == 2
-            print("  ✓ Step 2 (Stock) enforced.")
+            print("  [OK] Step 2 (Stock) enforced.")
 
         # Step 3: Spend limit check
         lock_price_for_sku(session, "SKU-KEYBOARD-MECH")
@@ -88,7 +88,7 @@ def run_tests():
             assert False, "Should have failed on spend check"
         except HTTPException as e:
             assert e.detail.get("step_failed") == 3
-            print("  ✓ Step 3 (Spend limit) enforced.")
+            print("  [OK] Step 3 (Spend limit) enforced.")
 
         print("\n=== TEST 4 & 6: Valid Checkout -> Simulated Razorpay Capture ===")
         coffee_item = session.exec(select(CatalogItem).where(CatalogItem.sku == "SKU-COFFEE-ROAST")).first()
@@ -103,14 +103,14 @@ def run_tests():
         assert valid_res["razorpay_order_id"].startswith("order_sim_")
         assert valid_res["razorpay_payment_id"].startswith("pay_sim_")
         assert valid_res["total_amount_paisa"] == 130000  # 65000 * 2
-        print(f"  ✓ Invariant 6 passed: Payment captured with IDs: {valid_res['razorpay_order_id']} and {valid_res['razorpay_payment_id']}")
+        print(f"  [OK] Invariant 6 passed: Payment captured with IDs: {valid_res['razorpay_order_id']} and {valid_res['razorpay_payment_id']}")
 
         print("\n=== TEST 5: Invariant 5 (Rule-Based Fallback Buyer) ===")
         fallback_res = run_rule_based_fallback_buyer(session, "Get 1 bag of coffee for team", "TEST_OFFLINE_SIMULATION")
         assert fallback_res["status"] == "COMPLETED"
         assert fallback_res["mode"] == "RULE_BASED_FALLBACK"
         assert fallback_res["checkout"]["razorpay_payment_id"].startswith("pay_sim_")
-        print("  ✓ Invariant 5 passed: Fallback buyer completed purchase deterministically under mandate.")
+        print("  [OK] Invariant 5 passed: Fallback buyer completed purchase deterministically under mandate.")
 
         print("\n=== TEST 7: Section 7 Lab Attacks (/lab/attack/{type}) ===")
         import asyncio
@@ -130,10 +130,10 @@ def run_tests():
                 assert res["block_reason"] == expected_reason
                 assert res["audit_log"] is not None
                 assert res["audit_log"]["status"] == "BLOCKED"
-                print(f"  ✓ Attack '{atype}' blocked with '{expected_reason}', audit log #{res['audit_log']['id']}")
+                print(f"  [OK] Attack '{atype}' blocked with '{expected_reason}', audit log #{res['audit_log']['id']}")
 
         asyncio.run(run_lab_checks())
-        print("  ✓ All 4 Section 7 Lab Attacks verified.")
+        print("  [OK] All 4 Section 7 Lab Attacks verified.")
 
     print("\nALL 6 INVARIANTS & SECTION 7 LAB ATTACKS VALIDATED AND VERIFIED SUCCESSFULLY!")
 

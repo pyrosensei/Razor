@@ -9,10 +9,11 @@ import { AuditLogViewer } from './components/AuditLogViewer';
 import { GateProtocolCard } from './components/GateProtocolCard';
 import { SpendMandateCard } from './components/SpendMandateCard';
 import { SecurityLabPage } from './components/SecurityLabPage';
+import { ArchitecturePage } from './components/ArchitecturePage';
 import { CatalogItem, SpendMandate, AuditLogEntry, BuyerRunResult } from './types';
 
 export default function App() {
-  const [mainView, setMainView] = useState<'catalog' | 'buyer' | 'commerce' | 'lab'>('lab');
+  const [mainView, setMainView] = useState<'catalog' | 'buyer' | 'commerce' | 'lab' | 'architecture'>('lab');
   const [catalog, setCatalog] = useState<CatalogItem[]>([]);
   const [mandate, setMandate] = useState<SpendMandate | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
@@ -234,6 +235,10 @@ export default function App() {
             mandate={mandate}
             onRefreshData={fetchData}
           />
+        </main>
+      ) : mainView === 'architecture' ? (
+        <main className="flex-1 bg-[#05070A] overflow-y-auto">
+          <ArchitecturePage />
         </main>
       ) : (
         <main className="flex-1 grid grid-cols-12 gap-0">
