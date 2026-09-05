@@ -59,7 +59,7 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
           <span
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-bold ${
               isRunning
-                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30 animate-pulse'
+                ? 'bg-white/20 text-white border border-white/30 animate-pulse'
                 : buyerResult?.status === 'SUCCESS'
                 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                 : 'bg-slate-900 text-zinc-500 border border-white/10'
@@ -67,7 +67,7 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
           >
             <span
               className={`w-1.5 h-1.5 rounded-full ${
-                isRunning ? 'bg-blue-400' : buyerResult?.status === 'SUCCESS' ? 'bg-emerald-400' : 'bg-slate-500'
+                isRunning ? 'bg-zinc-300' : buyerResult?.status === 'SUCCESS' ? 'bg-emerald-400' : 'bg-slate-500'
               }`}
             ></span>
             {isRunning ? 'PROCESSING' : buyerResult ? buyerResult.status : 'STANDBY'}
@@ -87,7 +87,7 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
               type="checkbox"
               checked={forceFallback}
               onChange={(e) => setForceFallback(e.target.checked)}
-              className="accent-[#3395FF] cursor-pointer"
+              className="accent-white cursor-pointer"
             />
           </div>
           <p className="text-[10px] text-zinc-600 font-mono">
@@ -137,7 +137,7 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
         <button
           type="submit"
           disabled={isRunning || !customIntent.trim()}
-          className="flex items-center gap-1.5 px-4 py-2 rounded bg-white hover:bg-[#2080ee] text-white text-xs font-bold font-sans uppercase tracking-wider transition-colors disabled:opacity-50 shadow-lg shadow-[#3395FF]/20"
+          className="flex items-center gap-1.5 px-4 py-2 rounded bg-white hover:bg-zinc-200 text-black text-xs font-bold font-sans uppercase tracking-wider transition-colors disabled:opacity-50 shadow-lg shadow-white/10"
         >
           <Play className="w-3.5 h-3.5 fill-current" />
           <span>{isRunning ? 'Shopping...' : 'Dispatch AI'}</span>

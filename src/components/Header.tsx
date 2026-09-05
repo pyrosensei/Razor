@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="flex flex-wrap items-center justify-between px-6 py-4 border-b border-white/10 bg-zinc-950 text-zinc-300">
       {/* Brand & Track Info */}
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 bg-white rounded flex items-center justify-center font-black text-white text-xl shadow-lg shadow-[#3395FF]/20">
+        <div className="w-10 h-10 bg-white rounded flex items-center justify-center font-black text-black text-xl shadow-lg shadow-white/10">
           A
         </div>
         <div>
@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={() => onSelectView('catalog')}
           className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase tracking-wider transition-all ${
             activeView === 'catalog'
-              ? 'bg-white text-black shadow-md shadow-blue-500/20'
+              ? 'bg-white text-black shadow-md shadow-white/10'
               : 'text-zinc-500 hover:text-zinc-200 hover:bg-slate-900'
           }`}
         >
@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={() => onSelectView('buyer')}
           className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase tracking-wider transition-all ${
             activeView === 'buyer'
-              ? 'bg-white text-black shadow-md shadow-blue-500/20'
+              ? 'bg-white text-black shadow-md shadow-white/10'
               : 'text-zinc-500 hover:text-zinc-200 hover:bg-slate-900'
           }`}
         >
@@ -73,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={() => onSelectView('commerce')}
           className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase tracking-wider transition-all ${
             activeView === 'commerce'
-              ? 'bg-white text-black shadow-md shadow-blue-500/20'
+              ? 'bg-white text-black shadow-md shadow-white/10'
               : 'text-zinc-500 hover:text-zinc-200 hover:bg-slate-900'
           }`}
         >
@@ -94,11 +94,11 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={() => onSelectView('architecture')}
           className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
             activeView === 'architecture'
-              ? 'bg-white text-black shadow-md shadow-blue-500/20'
+              ? 'bg-white text-black shadow-md shadow-white/10'
               : 'text-zinc-500 hover:text-zinc-200 hover:bg-slate-900'
           }`}
         >
-          <Workflow className="w-3.5 h-3.5 text-blue-400" />
+          <Workflow className="w-3.5 h-3.5 text-white" />
           <span>Architecture</span>
         </button>
       </div>

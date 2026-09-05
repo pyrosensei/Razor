@@ -96,7 +96,7 @@ export const SpendMandateCard: React.FC<SpendMandateCardProps> = ({
             <button
               onClick={handleSave}
               disabled={isLoading}
-              className="p-1 rounded bg-white text-black hover:bg-[#2080ee]"
+              className="p-1 rounded bg-white text-black hover:bg-zinc-200"
               title="Save Limit"
             >
               <Check className="w-3.5 h-3.5" />

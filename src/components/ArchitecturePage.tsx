@@ -26,7 +26,7 @@ const BUYER_TOOLS = [
   {
     name: 'search_catalog',
     badge: 'Discovery Tool',
-    badgeColor: 'text-blue-400 bg-blue-500/10 border-blue-500/30',
+    badgeColor: 'text-white bg-white/10 border-white/30',
     description:
       'Search the merchant catalog for products by keyword or category. Returns matching products with stock, locked price in INR, unit_price_paise, and lock status.',
     invariantNote: 'Read-only discovery. Never mutates catalog state or initiates payment.',
@@ -264,7 +264,7 @@ export const ArchitecturePage: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-7 gap-2">
             {[
               { step: '1', title: 'Merchant CSV', desc: 'Raw product data', color: 'border-white/20 bg-slate-900/60 text-zinc-300' },
-              { step: '2', title: 'Deterministic Gate', desc: 'INR parser & lock', color: 'border-blue-500/40 bg-blue-950/20 text-blue-400' },
+              { step: '2', title: 'Deterministic Gate', desc: 'INR parser & lock', color: 'border-white/40 bg-white/5 text-white' },
               { step: '3', title: 'Locked Catalog', desc: 'Immutable paise', color: 'border-emerald-500/40 bg-emerald-950/20 text-emerald-400' },
               { step: '4', title: 'AI Buyer Agent', desc: 'Persona & reasoning', color: 'border-indigo-500/40 bg-indigo-950/20 text-indigo-300' },
               { step: '5', title: 'Checkout Gate', desc: 'Order verification', color: 'border-emerald-500/40 bg-emerald-950/20 text-emerald-400' },
@@ -414,7 +414,7 @@ export const ArchitecturePage: React.FC = () => {
                 onClick={() => setActiveToolTab(tool.name as any)}
                 className={`px-3.5 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
                   activeToolTab === tool.name
-                    ? 'bg-white text-black shadow-md shadow-blue-500/20'
+                    ? 'bg-white text-black shadow-md shadow-white/10'
                     : 'bg-slate-900 text-zinc-500 hover:text-zinc-200 border border-white/10'
                 }`}
               >
@@ -429,7 +429,7 @@ export const ArchitecturePage: React.FC = () => {
               onClick={() => setActiveToolTab('all')}
               className={`px-3.5 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition-all ${
                 activeToolTab === 'all'
-                  ? 'bg-white text-black shadow-md shadow-blue-500/20'
+                  ? 'bg-white text-black shadow-md shadow-white/10'
                   : 'bg-slate-900 text-zinc-500 hover:text-zinc-200 border border-white/10'
               }`}
             >

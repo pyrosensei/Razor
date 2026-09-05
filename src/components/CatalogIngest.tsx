@@ -144,11 +144,11 @@ export const CatalogIngest: React.FC<CatalogIngestProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+              <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
               <h2 className="text-sm font-bold uppercase tracking-widest text-white font-mono">
                 Deterministic Catalog Ingest & Price Gate
               </h2>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/10 text-white border border-blue-500/20">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white border border-white/20">
                 POST /catalog/upload
               </span>
             </div>
@@ -167,7 +167,7 @@ export const CatalogIngest: React.FC<CatalogIngestProps> = ({
               <div className="text-[10px] uppercase font-mono text-zinc-600">Held-Out (Rejects)</div>
               <div className="text-sm font-bold font-mono text-rose-400">{heldOutCount}</div>
             </div>
-            <div className="bg-black border border-blue-500/30 px-3.5 py-1.5 rounded text-right">
+            <div className="bg-black border border-white/30 px-3.5 py-1.5 rounded text-right">
               <div className="text-[10px] uppercase font-mono text-white">Coverage %</div>
               <div className="text-sm font-bold font-mono text-white">{coveragePercent}%</div>
             </div>
@@ -182,7 +182,7 @@ export const CatalogIngest: React.FC<CatalogIngestProps> = ({
           </div>
           <div className="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-white/10">
             <div
-              className="h-full bg-gradient-to-r from-emerald-500 via-[#3395FF] to-blue-400 transition-all duration-500"
+              className="h-full bg-white transition-all duration-500"
               style={{ width: `${coveragePercent}%` }}
             />
           </div>
@@ -278,14 +278,14 @@ export const CatalogIngest: React.FC<CatalogIngestProps> = ({
       )}
 
       {/* Code Path Separation Proof Callout (Invariant 1 & Requirement 6) */}
-      <div className="bg-black border border-blue-500/20 rounded-lg p-3 text-xs font-mono">
+      <div className="bg-black border border-white/20 rounded-lg p-3 text-xs font-mono">
         <div className="flex items-center gap-2 text-white font-bold mb-1">
           <ShieldCheck className="w-4 h-4" />
           <span>INVARIANT 1 CODE PATH SEPARATION PROOF</span>
         </div>
         <p className="text-zinc-500 text-[11px] leading-relaxed">
           <strong className="text-zinc-200">Zero LLM Price Visibility:</strong> NVIDIA NIM is restricted strictly to mapping messy column headers (passed as string list <code className="text-amber-400">headers: List[str]</code>) and cleaning title text.
-          The cell price string is fed <strong className="text-emerald-400">directly and exclusively</strong> to Python's local deterministic rule parser (<code className="text-blue-300">parse_inr_price_to_paise</code>) in <code className="text-blue-300">backend/csv_ingest.py:270</code>. The LLM never sees or touches the raw price that gets locked.
+          The cell price string is fed <strong className="text-emerald-400">directly and exclusively</strong> to Python's local deterministic rule parser (<code className="text-zinc-300">parse_inr_price_to_paise</code>) in <code className="text-zinc-300">backend/csv_ingest.py:270</code>. The LLM never sees or touches the raw price that gets locked.
         </p>
       </div>
 
@@ -337,7 +337,7 @@ export const CatalogIngest: React.FC<CatalogIngestProps> = ({
                           {item.source_row_ref}
                         </span>
                       </td>
-                      <td className="px-4 py-2 text-blue-400 font-bold">{item.sku}</td>
+                      <td className="px-4 py-2 text-white font-bold">{item.sku}</td>
                       <td className="px-4 py-2 text-zinc-200 max-w-xs truncate">{item.title || item.name}</td>
                       <td className="px-4 py-2 text-right text-zinc-500">
                         {item.unit_price_paise.toLocaleString()} p

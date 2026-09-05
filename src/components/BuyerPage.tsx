@@ -133,7 +133,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
               <h2 className="text-lg font-bold text-white tracking-tight">
                 AI Autonomous Buyer Engine
               </h2>
-              <span className="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-white border border-blue-500/20 font-mono">
+              <span className="text-xs px-2 py-0.5 rounded bg-white/10 text-white border border-white/20 font-mono">
                 Section 6 • Observe → Reason → Act
               </span>
             </div>
@@ -173,7 +173,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                   id="simulate-groq-down-toggle"
                   checked={simulateGroqDown}
                   onChange={(e) => setSimulateGroqDown(e.target.checked)}
-                  className="w-4 h-4 accent-[#3395FF] cursor-pointer"
+                  className="w-4 h-4 accent-white cursor-pointer"
                 />
               </div>
               <p className="text-[11px] text-zinc-500 font-sans leading-normal">
@@ -337,7 +337,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
               type="button"
               onClick={handleRunBuyer}
               disabled={isRunning || !goal.trim()}
-              className="w-full py-3 px-4 rounded-xl bg-white hover:bg-[#2585f0] text-white text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#3395FF]/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="w-full py-3 px-4 rounded-xl bg-white hover:bg-zinc-200 text-black text-sm font-bold tracking-wide transition-all shadow-lg shadow-white/10 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {isRunning ? (
                 <>
@@ -421,7 +421,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                       <span>INVARIANT 5 FALLBACK USED</span>
                     </span>
                   ) : (
-                    <span className="px-2.5 py-1 rounded bg-blue-500/10 border border-blue-500/30 text-white text-xs font-mono font-bold flex items-center gap-1.5">
+                    <span className="px-2.5 py-1 rounded bg-white/10 border border-white/30 text-white text-xs font-mono font-bold flex items-center gap-1.5">
                       <Bot className="w-3.5 h-3.5" />
                       <span>NVIDIA NIM TOOL-CALLING</span>
                     </span>
@@ -497,11 +497,11 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
             {/* Transcript Body (Scrollable) */}
             <div className="p-4 space-y-4 max-h-[460px] overflow-y-auto font-mono text-xs bg-black">
               {isRunning && (
-                <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center gap-3 text-blue-400 animate-pulse">
+                <div className="p-4 rounded-lg bg-white/10 border border-white/20 flex items-center gap-3 text-white animate-pulse">
                   <RefreshCw className="w-4 h-4 animate-spin" />
                   <div>
                     <span className="font-bold">Autonomous loop in progress...</span>
-                    <p className="text-[11px] text-blue-300/80 font-sans mt-0.5">
+                    <p className="text-[11px] text-zinc-300/80 font-sans mt-0.5">
                       Executing turns with NVIDIA NIM tool-calling against real catalog and deterministic gate.
                     </p>
                   </div>
@@ -511,7 +511,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
               {buyerResult?.transcript && buyerResult.transcript.length > 0 ? (
                 buyerResult.transcript.map((step: TranscriptStep, index: number) => {
                   const phaseColor = {
-                    observe: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+                    observe: 'bg-white/10 text-white border-white/30',
                     reason: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
                     act: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
                     tool_result: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
