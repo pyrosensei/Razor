@@ -6,6 +6,9 @@ coverage/
 *.log
 .env*
 !.env.example
+.env
+*.db
+aisle.db
 __pycache__/
 *.py[cod]
 *$py.class
