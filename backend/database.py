@@ -7,9 +7,9 @@ from backend.models import (
 )
 
 DB_FILE = os.environ.get("AISLE_DB_FILE", "aisle.db")
-DATABASE_URL = f"sqlite:///{DB_FILE}"
+DATABASE_URL = f"sqlite:///{DB_FILE}?timeout=30"
 
-engine = create_engine(DATABASE_URL, echo=False, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL, echo=False, connect_args={"check_same_thread": False, "timeout": 30})
 
 def get_session():
     with Session(engine) as session:

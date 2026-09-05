@@ -133,6 +133,7 @@ export default function App() {
         body: JSON.stringify({
           intent,
           force_fallback: forceFallback,
+          nvidia_nim_api_key: groqApiKey || undefined,
           groq_api_key: groqApiKey || undefined,
         }),
       });

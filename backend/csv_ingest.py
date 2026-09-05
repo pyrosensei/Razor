@@ -11,8 +11,8 @@ from sqlmodel import Session, select
 from backend.models import CatalogItem, AuditLog, RejectedCatalogItem
 from backend.inr_parser import parse_inr_price_to_paise
 
-GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+DEFAULT_GROQ_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
 
 # ==============================================================================
 # INVARIANT 1 & REQUIREMENT 6 CODE PATH SEPARATION PROOF:
@@ -242,8 +242,8 @@ def ingest_catalog_csv(
     # Resolve header mapping
     resolved_headers = map_column_headers_with_rules(headers)
     
-    # If required columns are missing and Groq API key is present, use Groq for header mapping ONLY
-    effective_groq_key = groq_api_key or os.environ.get("GROQ_API_KEY")
+    # If required columns are missing and NVIDIA NIM API key is present, use Nemotron for header mapping ONLY
+    effective_groq_key = groq_api_key or os.environ.get("NVIDIA_NIM_API_KEY") or os.environ.get("GROQ_API_KEY")
     if (not resolved_headers.get("price") or not resolved_headers.get("title")) and effective_groq_key:
         groq_mapped = map_headers_with_groq(headers, effective_groq_key)
         for k, v in groq_mapped.items():

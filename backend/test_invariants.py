@@ -7,6 +7,9 @@ from backend.gate import lock_price_for_sku, process_checkout_gate
 from backend.buyer import run_rule_based_fallback_buyer
 from fastapi import HTTPException
 
+def test_invariants():
+    run_tests()
+
 def run_tests():
     init_db()
     with Session(engine) as session:

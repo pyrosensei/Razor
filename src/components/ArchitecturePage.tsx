@@ -170,7 +170,7 @@ const ARCHITECTURE_MATRIX = [
   {
     domain: 'Column Mapping',
     type: 'Probabilistic',
-    engine: 'Groq LLM / Fuzzy Matching',
+    engine: 'NVIDIA NIM (Nemotron) / Fuzzy Matching',
     authority: 'Model',
     description: 'Maps messy merchant headers (e.g. "Cost of Item", "Product Title") to canonical catalog keys.',
     isDeterministic: false
@@ -178,7 +178,7 @@ const ARCHITECTURE_MATRIX = [
   {
     domain: 'Title Cleanup',
     type: 'Probabilistic',
-    engine: 'Groq LLM',
+    engine: 'NVIDIA NIM (Nemotron)',
     authority: 'Model',
     description: 'Normalizes brand names, strips extraneous marketing fluff, and categorizes products.',
     isDeterministic: false
@@ -186,7 +186,7 @@ const ARCHITECTURE_MATRIX = [
   {
     domain: 'Buyer Search Intent',
     type: 'Probabilistic',
-    engine: 'Groq LLM (llama-3.3-70b-versatile)',
+    engine: 'NVIDIA NIM (nvidia/nemotron-3.5-lightning-30b-a3b)',
     authority: 'Model',
     description: 'Interprets user prompt, persona context, and goals to formulate search queries and compare candidate products.',
     isDeterministic: false
@@ -194,7 +194,7 @@ const ARCHITECTURE_MATRIX = [
   {
     domain: 'SKU Pick',
     type: 'Probabilistic',
-    engine: 'Groq LLM (Autonomous agent loop)',
+    engine: 'NVIDIA NIM (Autonomous agent loop)',
     authority: 'Model',
     description: 'Decides which specific product to buy based on user preferences and requirements.',
     isDeterministic: false
@@ -376,7 +376,7 @@ export const ArchitecturePage: React.FC = () => {
           <div className="p-3.5 rounded-lg bg-[#05070A] border border-slate-800 flex items-start gap-3 text-xs text-slate-400">
             <Info className="w-4 h-4 text-[#3395FF] shrink-0 mt-0.5" />
             <div>
-              <strong className="text-white font-mono">Architectural Guarantee:</strong> Even if the probabilistic Groq model hallucinates a price of ₹1.00 or invents a 90% coupon, the deterministic execution engine enforces strict database prices and immediate attack blocking. The model can never write the monetary number charged.
+              <strong className="text-white font-mono">Architectural Guarantee:</strong> Even if the probabilistic NVIDIA NIM model hallucinates a price of ₹1.00 or invents a 90% coupon, the deterministic execution engine enforces strict database prices and immediate attack blocking. The model can never write the monetary number charged.
             </div>
           </div>
         </div>
@@ -388,7 +388,7 @@ export const ArchitecturePage: React.FC = () => {
           <div className="flex items-center gap-2">
             <Code className="w-4 h-4 text-[#3395FF]" />
             <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-white">
-              MCP / Groq Model-Facing Tool Definitions
+              MCP / NVIDIA NIM Model-Facing Tool Definitions
             </h2>
           </div>
           <span className="text-[11px] font-mono text-emerald-400 uppercase">
@@ -399,7 +399,7 @@ export const ArchitecturePage: React.FC = () => {
         <div className="p-6 space-y-6">
           <div className="p-4 rounded-lg bg-[#05070A] border border-slate-800 text-xs text-slate-300 leading-relaxed">
             <p>
-              The LLM buyer operates through three OpenAI/Groq function-calling tools. Notice that <strong className="text-emerald-400 font-mono">create_checkout</strong> accepts strictly only <code className="text-amber-300 font-mono">sku</code> and <code className="text-amber-300 font-mono">qty</code>. Price and discount parameters are completely absent from the tool definition schema (Invariant 2).
+              The LLM buyer operates through three OpenAI-compatible function-calling tools via NVIDIA NIM. Notice that <strong className="text-emerald-400 font-mono">create_checkout</strong> accepts strictly only <code className="text-amber-300 font-mono">sku</code> and <code className="text-amber-300 font-mono">qty</code>. Price and discount parameters are completely absent from the tool definition schema (Invariant 2).
             </p>
           </div>
 

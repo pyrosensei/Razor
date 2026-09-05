@@ -96,13 +96,13 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
 
           <div className="pt-2 border-t border-slate-800">
             <label className="block text-[10px] text-slate-400 uppercase tracking-wider mb-1 font-mono">
-              Groq API Key (Optional — fallback buyer used if empty):
+              NVIDIA NIM API Key (Optional — fallback buyer used if empty):
             </label>
             <input
               type="password"
               value={groqApiKey}
               onChange={(e) => setGroqApiKey(e.target.value)}
-              placeholder="gsk_..."
+              placeholder="nvapi-..."
               className="w-full bg-[#05070A] border border-slate-800 text-slate-200 px-3 py-1 rounded text-xs focus:outline-none focus:border-[#3395FF] font-mono"
             />
           </div>

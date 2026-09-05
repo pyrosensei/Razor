@@ -98,6 +98,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
           spend_limit_paise: spendLimitPaise,
           goal: goal.trim(),
           simulate_groq_down: simulateGroqDown,
+          nvidia_nim_api_key: groqApiKey.trim() || undefined,
           groq_api_key: groqApiKey.trim() || undefined,
         }),
       });
@@ -182,17 +183,17 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
 
             <div className="bg-[#05070A] p-3 rounded-lg border border-slate-800">
               <label className="block text-slate-400 uppercase tracking-wider text-[10px] mb-1 font-mono">
-                Groq API Key (Optional — fallback used if omitted):
+                NVIDIA NIM API Key (Optional — fallback used if omitted):
               </label>
               <input
                 type="password"
                 value={groqApiKey}
                 onChange={(e) => setGroqApiKey(e.target.value)}
-                placeholder="gsk_..."
+                placeholder="nvapi-..."
                 className="w-full bg-[#0A0F1D] border border-slate-800 text-slate-200 px-3 py-1.5 rounded text-xs focus:outline-none focus:border-[#3395FF] font-mono"
               />
-              <span className="text-[10px] text-slate-500 mt-1 block">
-                Model defaults to <span className="text-slate-300">llama-3.3-70b-versatile</span> with function-calling.
+              <span className="text-[10px] text-slate-500 mt-1 block font-mono">
+                Model defaults to <span className="text-slate-300">nvidia/nemotron-3.5-lightning-30b-a3b</span> with function-calling.
               </span>
             </div>
           </div>

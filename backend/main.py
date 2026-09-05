@@ -16,6 +16,7 @@ from backend.gate import (
 )
 import secrets
 import json
+import datetime
 from backend.buyer import run_ai_buyer
 from backend.csv_ingest import ingest_catalog_csv
 
@@ -456,7 +457,7 @@ async def trigger_buyer(
     if spend_limit_paise is None or spend_limit_paise <= 0:
         spend_limit_paise = 500000  # Default ₹5,000.00
 
-    groq_api_key = payload.get("groq_api_key")
+    groq_api_key = payload.get("nvidia_nim_api_key") or payload.get("groq_api_key")
     force_fallback = payload.get("force_fallback", False) or payload.get("simulate_groq_down", False)
     simulate_groq_down = payload.get("simulate_groq_down", False)
     buyer_session_id = payload.get("buyer_session_id") or payload.get("session_id")
@@ -690,9 +691,9 @@ async def simulate_attack(
 
 @app.post("/api/reset")
 def reset_system(session: Session = Depends(get_session)):
-    """Resets the catalog, spend mandate, and test state."""
-    # Delete all records
-    for model in [CheckoutRecord, Order, AuditLog, CatalogItem, SpendMandate, RejectedCatalogItem, BuyerSession]:
+    """Resets the catalog, spend mandate, and test state while preserving immutable AuditLog."""
+    # Delete non-audit records (Audit logs are strictly append-only)
+    for model in [CheckoutRecord, Order, CatalogItem, SpendMandate, RejectedCatalogItem, BuyerSession]:
         records = session.exec(select(model)).all()
         for r in records:
             session.delete(r)
@@ -700,4 +701,17 @@ def reset_system(session: Session = Depends(get_session)):
 
     # Re-seed
     init_db()
+
+    # Write one audit_log row so reset is visible in the trail (Invariant 4)
+    reset_entry = AuditLog(
+        action="system_reset",
+        event_type="system_reset",
+        status="SUCCESS",
+        reason="audit trail rotated",
+        payload_snapshot=json.dumps({"detail": "audit trail rotated"}),
+        timestamp=datetime.datetime.utcnow()
+    )
+    session.add(reset_entry)
+    session.commit()
+
     return {"message": "Aisle database reset and re-seeded to initial state."}

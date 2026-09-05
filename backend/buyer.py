@@ -10,8 +10,8 @@ from sqlmodel import Session, select
 from backend.models import CatalogItem, SpendMandate, AuditLog, BuyerSession, Order
 from backend.gate import lock_price_for_sku, process_checkout_gate, log_audit
 
-GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
-DEFAULT_GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+DEFAULT_GROQ_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
 MAX_AGENT_TURNS = 6
 
 # -----------------------------------------------------------------------------
@@ -272,6 +272,19 @@ def run_rule_based_fallback_buyer(
 
     if not target_item:
         msg = f"Rule-based fallback buyer could not find any locked in-stock item within budget ₹{remaining_budget_paise/100:.2f}."
+        log_audit(
+            session=session,
+            action="fallback_failed",
+            event_type="fallback_failed",
+            status="FAILED",
+            reason=msg,
+            payload_snapshot=json.dumps({
+                "buyer_session_id": buyer_session_id,
+                "intent": intent,
+                "reason": msg,
+                "remaining_budget_paise": remaining_budget_paise
+            })
+        )
         transcript.append({
             "turn": 1,
             "phase": "reason",
@@ -422,7 +435,7 @@ async def run_ai_buyer(
     3. Runs up to 6 turns, logging every step to transcript.
     4. If Groq call throws or times out, engages Invariant 5 rule-based fallback.
     """
-    api_key = groq_api_key or os.environ.get("GROQ_API_KEY", "").strip()
+    api_key = groq_api_key or os.environ.get("NVIDIA_NIM_API_KEY", "").strip() or os.environ.get("GROQ_API_KEY", "").strip()
 
     # Check simulation flags for Groq down (env vars or request flags)
     is_down_simulated = (
@@ -446,7 +459,7 @@ async def run_ai_buyer(
         return run_rule_based_fallback_buyer(
             session=session,
             intent=intent,
-            reason_trigger="GROQ_API_KEY_NOT_CONFIGURED",
+            reason_trigger="NVIDIA_NIM_API_KEY_NOT_CONFIGURED",
             spend_limit_paise=spend_limit_paise,
             buyer_session_id=buyer_session_id,
             persona=persona
@@ -519,7 +532,7 @@ async def run_ai_buyer(
                 resp = await client.post(GROQ_API_URL, headers=headers, json=payload)
                 if resp.status_code != 200:
                     err_text = resp.text
-                    print(f"[Aisle Buyer] Groq API error {resp.status_code}: {err_text}")
+                    print(f"[Aisle Buyer] NVIDIA NIM API error {resp.status_code}: {err_text}")
                     return run_rule_based_fallback_buyer(
                         session=session,
                         intent=intent,
@@ -604,7 +617,7 @@ async def run_ai_buyer(
                     break
 
     except Exception as e:
-        print(f"[Aisle Buyer] Exception during Groq communication: {str(e)}")
+        print(f"[Aisle Buyer] NVIDIA NIM exception during communication: {str(e)}")
         # Invariant 5: money path never hard-depends on LLM
         return run_rule_based_fallback_buyer(
             session=session,
@@ -631,9 +644,9 @@ async def run_ai_buyer(
     spend_used = b_sess.spend_used if b_sess else (final_checkout.get("total_paise", 0) or 0)
 
     return {
-        "mode": "GROQ_LLM",
+        "mode": "NVIDIA_NIM_LLM",
         "status": "COMPLETED",
-        "buyer_engine": f"Groq Autonomous Tool Calling ({DEFAULT_GROQ_MODEL})",
+        "buyer_engine": f"NVIDIA NIM Autonomous Tool Calling ({DEFAULT_GROQ_MODEL})",
         "intent": intent,
         "persona": effective_persona,
         "buyer_session_id": effective_session_id,

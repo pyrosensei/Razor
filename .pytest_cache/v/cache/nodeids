@@ -1,0 +1,6 @@
+[
+  "backend/test_buyer_loop.py::test_buyer_run_env_var_fallback",
+  "backend/test_buyer_loop.py::test_buyer_run_fallback_simulation",
+  "backend/test_buyer_loop.py::test_tool_definitions_schema_invariant",
+  "backend/test_invariants.py::test_invariants"
+]
