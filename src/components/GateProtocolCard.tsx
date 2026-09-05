@@ -19,11 +19,11 @@ export const GateProtocolCard: React.FC = () => {
   ];
 
   return (
-    <div className="mt-4 p-4 border border-slate-800 rounded-lg bg-slate-900/40">
+    <div className="mt-4 p-4 border border-white/10 rounded-lg bg-slate-900/40">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2.5">
           <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-          <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider font-mono">
+          <span className="text-[10px] font-bold text-zinc-300 uppercase tracking-wider font-mono">
             The Gate Protocol // Strict Invariant Enforcement
           </span>
         </div>
@@ -35,27 +35,27 @@ export const GateProtocolCard: React.FC = () => {
         {gateSequence.map((item) => (
           <div
             key={item.step}
-            className="flex items-start gap-2 p-2 rounded bg-[#05070A] border border-slate-800/80 text-[10px] font-mono"
+            className="flex items-start gap-2 p-2 rounded bg-black border border-white/10/80 text-[10px] font-mono"
           >
             <span className="text-emerald-500 font-bold mt-0.5">[✓]</span>
             <div>
-              <div className="text-slate-200 font-bold">{item.name}</div>
-              <div className="text-slate-500 text-[9px] leading-tight mt-0.5">{item.desc}</div>
+              <div className="text-zinc-200 font-bold">{item.name}</div>
+              <div className="text-zinc-600 text-[9px] leading-tight mt-0.5">{item.desc}</div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Invariants summary */}
-      <div className="pt-2 border-t border-slate-800/60">
-        <div className="text-[9px] font-mono uppercase text-slate-400 mb-1.5 font-bold tracking-wider">
+      <div className="pt-2 border-t border-white/10/60">
+        <div className="text-[9px] font-mono uppercase text-zinc-500 mb-1.5 font-bold tracking-wider">
           Non-Negotiable Architecture Invariants:
         </div>
-        <div className="space-y-1 text-[9px] font-mono text-slate-500">
+        <div className="space-y-1 text-[9px] font-mono text-zinc-600">
           {invariants.map((inv) => (
             <div key={inv.id} className="flex items-baseline gap-1.5">
-              <span className="text-[#3395FF] font-bold">INV #{inv.id}:</span>
-              <span className="text-slate-400">{inv.text}</span>
+              <span className="text-white font-bold">INV #{inv.id}:</span>
+              <span className="text-zinc-500">{inv.text}</span>
             </div>
           ))}
         </div>

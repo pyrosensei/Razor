@@ -62,11 +62,11 @@ export const AttackSimulator: React.FC<AttackSimulatorProps> = ({
   };
 
   return (
-    <div className="bg-[#0A0F1D] border border-slate-800 rounded-lg p-5 font-mono text-xs">
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+    <div className="bg-zinc-950 border border-white/10 rounded-lg p-5 font-mono text-xs">
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
         <div className="flex items-center gap-2">
           <ShieldAlert className="w-4 h-4 text-red-400" />
-          <h3 className="font-bold text-slate-200 uppercase tracking-wider text-xs">
+          <h3 className="font-bold text-zinc-200 uppercase tracking-wider text-xs">
             Invariant 2 Attack Simulator
           </h3>
         </div>
@@ -75,7 +75,7 @@ export const AttackSimulator: React.FC<AttackSimulatorProps> = ({
         </span>
       </div>
 
-      <p className="text-slate-400 text-[11px] mb-3 leading-relaxed">
+      <p className="text-zinc-500 text-[11px] mb-3 leading-relaxed">
         Test LLM prompt injections and client tampering. Invariant 2 mandates: if <code className="text-red-400 bg-slate-900 px-1 py-0.5 rounded">price</code>, <code className="text-red-400 bg-slate-900 px-1 py-0.5 rounded">unit_price</code>, or <code className="text-red-400 bg-slate-900 px-1 py-0.5 rounded">discount</code> is present, immediately block and audit-log as attack.
       </p>
 
@@ -88,15 +88,15 @@ export const AttackSimulator: React.FC<AttackSimulatorProps> = ({
             onClick={() => handleSelectVector(vec)}
             className={`p-2 rounded text-left border transition-colors ${
               selectedVector.title === vec.title
-                ? 'bg-red-950/30 border-red-500/40 text-slate-200'
-                : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:text-slate-200'
+                ? 'bg-red-950/30 border-red-500/40 text-zinc-200'
+                : 'bg-slate-900/40 border-white/10 text-zinc-500 hover:text-zinc-200'
             }`}
           >
             <div className="text-[11px] font-bold text-red-400 flex items-center gap-1">
               <Flame className="w-3 h-3" />
               <span>{vec.title}</span>
             </div>
-            <div className="text-[10px] text-slate-500 line-clamp-1 mt-0.5">
+            <div className="text-[10px] text-zinc-600 line-clamp-1 mt-0.5">
               {vec.description}
             </div>
           </button>
@@ -105,7 +105,7 @@ export const AttackSimulator: React.FC<AttackSimulatorProps> = ({
 
       {/* JSON Payload Editor */}
       <div className="mb-3">
-        <div className="flex justify-between text-[10px] text-slate-500 mb-1">
+        <div className="flex justify-between text-[10px] text-zinc-600 mb-1">
           <span>MALICIOUS CHECKOUT PAYLOAD</span>
           <span>Only sku + qty allowed</span>
         </div>
@@ -113,7 +113,7 @@ export const AttackSimulator: React.FC<AttackSimulatorProps> = ({
           value={customJson}
           onChange={(e) => setCustomJson(e.target.value)}
           rows={4}
-          className="w-full bg-[#05070A] border border-slate-800 rounded p-2.5 text-xs text-red-300 font-mono focus:outline-none focus:border-red-500/50"
+          className="w-full bg-black border border-white/10 rounded p-2.5 text-xs text-red-300 font-mono focus:outline-none focus:border-red-500/50"
         />
       </div>
 
@@ -128,7 +128,7 @@ export const AttackSimulator: React.FC<AttackSimulatorProps> = ({
           <span>{isLoading ? 'Firing Attack...' : 'Fire Malicious Payload to Gate'}</span>
         </button>
 
-        <span className="text-[10px] text-slate-500 font-mono">
+        <span className="text-[10px] text-zinc-600 font-mono">
           Endpoint: POST /api/checkout
         </span>
       </div>
@@ -141,9 +141,9 @@ export const AttackSimulator: React.FC<AttackSimulatorProps> = ({
               <AlertTriangle className="w-3 h-3 text-red-500" />
               {attackResponse.gate_status === 'BLOCKED_ATTACK' ? '[BLOCKED_ATTACK]' : '[REJECTED]'}
             </span>
-            <span className="text-slate-500">Security Gate Intercept</span>
+            <span className="text-zinc-600">Security Gate Intercept</span>
           </div>
-          <p className="text-xs text-slate-200 font-mono mb-1">
+          <p className="text-xs text-zinc-200 font-mono mb-1">
             {attackResponse.reason || attackResponse.error || 'Attack successfully intercepted and logged.'}
           </p>
           {attackResponse.prohibited_keys_found && (
@@ -151,7 +151,7 @@ export const AttackSimulator: React.FC<AttackSimulatorProps> = ({
               Violating Keys Trapped: [{attackResponse.prohibited_keys_found.join(', ')}]
             </div>
           )}
-          <p className="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">
+          <p className="text-[9px] text-zinc-600 mt-1 uppercase tracking-wider">
             Written to audit_log table with status: BLOCKED_ATTACK
           </p>
         </div>

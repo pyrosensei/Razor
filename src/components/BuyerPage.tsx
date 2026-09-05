@@ -123,21 +123,21 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
   return (
     <div className="flex-1 flex flex-col p-6 max-w-7xl mx-auto w-full space-y-6">
       {/* Top Banner / Invariant Brief */}
-      <div className="bg-[#0A0F1D] border border-slate-800 rounded-xl p-5 shadow-sm">
+      <div className="bg-zinc-950 border border-white/10 rounded-xl p-5 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#3395FF]/10 border border-[#3395FF]/30 flex items-center justify-center text-[#3395FF]">
+              <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/30/30 flex items-center justify-center text-white">
                 <Bot className="w-4 h-4" />
               </div>
               <h2 className="text-lg font-bold text-white tracking-tight">
                 AI Autonomous Buyer Engine
               </h2>
-              <span className="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-[#3395FF] border border-blue-500/20 font-mono">
+              <span className="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-white border border-blue-500/20 font-mono">
                 Section 6 • Observe → Reason → Act
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-1 max-w-2xl font-sans leading-relaxed">
+            <p className="text-xs text-zinc-500 mt-1 max-w-2xl font-sans leading-relaxed">
               The model shops, the rules pay. The LLM operates with zero price authority: it invokes{' '}
               <code className="text-emerald-400 bg-slate-900 px-1 py-0.5 rounded font-mono text-[11px]">search_catalog</code>,{' '}
               <code className="text-emerald-400 bg-slate-900 px-1 py-0.5 rounded font-mono text-[11px]">get_item</code>, and{' '}
@@ -148,7 +148,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-600 bg-slate-900/80 text-xs font-mono text-slate-300 transition-colors"
+              className="px-3 py-1.5 rounded-lg border border-white/20 hover:border-slate-600 bg-slate-900/80 text-xs font-mono text-zinc-300 transition-colors"
             >
               {showSettings ? 'Hide Settings' : 'Engine Settings'}
             </button>
@@ -161,11 +161,11 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
 
         {/* Engine Settings (API Key & Fallback Simulator) */}
         {showSettings && (
-          <div className="mt-4 pt-4 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-            <div className="bg-[#05070A] p-3 rounded-lg border border-slate-800">
+          <div className="mt-4 pt-4 border-t border-white/10/80 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+            <div className="bg-black p-3 rounded-lg border border-white/10">
               <div className="flex items-center justify-between mb-1">
-                <label className="text-slate-300 font-sans font-medium flex items-center gap-1.5">
-                  <Cpu className="w-4 h-4 text-[#3395FF]" />
+                <label className="text-zinc-300 font-sans font-medium flex items-center gap-1.5">
+                  <Cpu className="w-4 h-4 text-white" />
                   <span>Invariant 5 Fallback Simulation</span>
                 </label>
                 <input
@@ -176,13 +176,13 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                   className="w-4 h-4 accent-[#3395FF] cursor-pointer"
                 />
               </div>
-              <p className="text-[11px] text-slate-400 font-sans leading-normal">
-                Simulates Groq API being offline or unreachable. Proves Invariant 5: money path completes safely via deterministic rule-based buyer under budget. Distinctly logs <code className="text-amber-400 font-mono">fallback_triggered</code>.
+              <p className="text-[11px] text-zinc-500 font-sans leading-normal">
+                Simulates NVIDIA NIM API being offline or unreachable. Proves Invariant 5: money path completes safely via deterministic rule-based buyer under budget. Distinctly logs <code className="text-amber-400 font-mono">fallback_triggered</code>.
               </p>
             </div>
 
-            <div className="bg-[#05070A] p-3 rounded-lg border border-slate-800">
-              <label className="block text-slate-400 uppercase tracking-wider text-[10px] mb-1 font-mono">
+            <div className="bg-black p-3 rounded-lg border border-white/10">
+              <label className="block text-zinc-500 uppercase tracking-wider text-[10px] mb-1 font-mono">
                 NVIDIA NIM API Key (Optional — fallback used if omitted):
               </label>
               <input
@@ -190,10 +190,10 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                 value={groqApiKey}
                 onChange={(e) => setGroqApiKey(e.target.value)}
                 placeholder="nvapi-..."
-                className="w-full bg-[#0A0F1D] border border-slate-800 text-slate-200 px-3 py-1.5 rounded text-xs focus:outline-none focus:border-[#3395FF] font-mono"
+                className="w-full bg-zinc-950 border border-white/10 text-zinc-200 px-3 py-1.5 rounded text-xs focus:outline-none focus:border-white/30 font-mono"
               />
-              <span className="text-[10px] text-slate-500 mt-1 block font-mono">
-                Model defaults to <span className="text-slate-300">nvidia/nemotron-3.5-lightning-30b-a3b</span> with function-calling.
+              <span className="text-[10px] text-zinc-600 mt-1 block font-mono">
+                Model defaults to <span className="text-zinc-300">nvidia/nemotron-3.5-lightning-30b-a3b</span> with function-calling.
               </span>
             </div>
           </div>
@@ -204,14 +204,14 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
       <div className="grid grid-cols-12 gap-6 items-start">
         {/* Left Column: Buyer Parameters */}
         <div className="col-span-12 lg:col-span-5 space-y-5">
-          <div className="bg-[#0A0F1D] border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2 pb-2 border-b border-slate-800">
+          <div className="bg-zinc-950 border border-white/10 rounded-xl p-5 shadow-sm space-y-4">
+            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-2 pb-2 border-b border-white/10">
               <span>01 // Procurement Parameters</span>
             </h3>
 
             {/* Persona Dropdown */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-sans">
+              <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-sans">
                 Buyer Persona
               </label>
               <div className="relative">
@@ -219,7 +219,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                   value={selectedPersona}
                   onChange={(e) => setSelectedPersona(e.target.value)}
                   disabled={isRunning}
-                  className="w-full appearance-none bg-[#05070A] border border-slate-800 rounded-lg px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-[#3395FF] font-mono cursor-pointer"
+                  className="w-full appearance-none bg-black border border-white/10 rounded-lg px-3 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-white/30 font-mono cursor-pointer"
                 >
                   {PERSONA_OPTIONS.map((p) => (
                     <option key={p.id} value={p.name}>
@@ -227,22 +227,22 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="w-4 h-4 text-slate-500 absolute right-3 top-3 pointer-events-none" />
+                <ChevronDown className="w-4 h-4 text-zinc-600 absolute right-3 top-3 pointer-events-none" />
               </div>
             </div>
 
             {/* Spend Limit Input */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-medium text-slate-300 font-sans">
+                <label className="text-xs font-medium text-zinc-300 font-sans">
                   Session Spend Limit
                 </label>
-                <span className="text-[11px] font-mono text-slate-400">
+                <span className="text-[11px] font-mono text-zinc-500">
                   {spendLimitPaise.toLocaleString()} paise
                 </span>
               </div>
               <div className="relative mb-2">
-                <span className="absolute left-3 top-2.5 text-slate-400 font-mono text-sm font-bold">
+                <span className="absolute left-3 top-2.5 text-zinc-500 font-mono text-sm font-bold">
                   ₹
                 </span>
                 <input
@@ -252,7 +252,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                   value={spendLimitInr}
                   onChange={(e) => setSpendLimitInr(Math.max(1, Number(e.target.value)))}
                   disabled={isRunning}
-                  className="w-full bg-[#05070A] border border-slate-800 rounded-lg pl-8 pr-3 py-2 text-sm text-white font-mono font-bold focus:outline-none focus:border-[#3395FF]"
+                  className="w-full bg-black border border-white/10 rounded-lg pl-8 pr-3 py-2 text-sm text-white font-mono font-bold focus:outline-none focus:border-white/30"
                 />
               </div>
 
@@ -266,8 +266,8 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                     disabled={isRunning}
                     className={`flex-1 py-1 rounded text-[10px] font-mono font-bold uppercase transition-colors border ${
                       spendLimitInr === preset.paise / 100
-                        ? 'bg-[#3395FF]/20 text-[#3395FF] border-[#3395FF]/40'
-                        : 'bg-[#05070A] text-slate-400 border-slate-800 hover:text-slate-200'
+                        ? 'bg-white/20 text-white border-white/30/40'
+                        : 'bg-black text-zinc-500 border-white/10 hover:text-zinc-200'
                     }`}
                   >
                     {preset.label}
@@ -278,7 +278,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
 
             {/* Goal / Intent Input */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5 font-sans">
+              <label className="block text-xs font-medium text-zinc-300 mb-1.5 font-sans">
                 Procurement Objective (Goal)
               </label>
               <textarea
@@ -287,12 +287,12 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                 onChange={(e) => setGoal(e.target.value)}
                 disabled={isRunning}
                 placeholder="Describe what the agent should purchase within budget..."
-                className="w-full bg-[#05070A] border border-slate-800 rounded-lg p-3 text-xs text-slate-200 focus:outline-none focus:border-[#3395FF] font-sans resize-none"
+                className="w-full bg-black border border-white/10 rounded-lg p-3 text-xs text-zinc-200 focus:outline-none focus:border-white/30 font-sans resize-none"
               />
 
               {/* Quick Preset Buttons */}
               <div className="mt-2 space-y-1.5">
-                <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">
+                <span className="text-[10px] uppercase font-mono tracking-wider text-zinc-600 block">
                   Quick Goal Presets:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
@@ -302,7 +302,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                       type="button"
                       onClick={() => setGoal(q.goal)}
                       disabled={isRunning}
-                      className="px-2 py-1 rounded bg-[#05070A] hover:bg-slate-800 border border-slate-800 text-[10px] font-mono text-slate-400 hover:text-slate-200 transition-colors"
+                      className="px-2 py-1 rounded bg-black hover:bg-slate-800 border border-white/10 text-[10px] font-mono text-zinc-500 hover:text-zinc-200 transition-colors"
                     >
                       {q.label}
                     </button>
@@ -316,9 +316,9 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
               <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-start gap-2.5 text-xs text-amber-300 font-sans">
                 <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold font-mono">SIMULATE_GROQ_DOWN Active:</span>
+                  <span className="font-bold font-mono">SIMULATE_NIM_DOWN Active:</span>
                   <p className="text-[11px] text-amber-400/90 mt-0.5">
-                    The agent will trigger Invariant 5 rule-based fallback buyer. Purchase will complete deterministically without Groq.
+                    The agent will trigger Invariant 5 rule-based fallback buyer. Purchase will complete deterministically without NVIDIA NIM.
                   </p>
                 </div>
               </div>
@@ -337,7 +337,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
               type="button"
               onClick={handleRunBuyer}
               disabled={isRunning || !goal.trim()}
-              className="w-full py-3 px-4 rounded-xl bg-[#3395FF] hover:bg-[#2585f0] text-white text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#3395FF]/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="w-full py-3 px-4 rounded-xl bg-white hover:bg-[#2585f0] text-white text-sm font-bold tracking-wide transition-all shadow-lg shadow-[#3395FF]/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {isRunning ? (
                 <>
@@ -354,20 +354,20 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
           </div>
 
           {/* Architecture Guardrail Reminder */}
-          <div className="bg-[#080B14] border border-slate-800/80 rounded-xl p-4 text-[11px] font-mono text-slate-400 space-y-2">
-            <div className="text-slate-300 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#3395FF]" />
+          <div className="bg-zinc-950 border border-white/10/80 rounded-xl p-4 text-[11px] font-mono text-zinc-500 space-y-2">
+            <div className="text-zinc-300 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-white" />
               <span>Non-Negotiable Invariants Enforced</span>
             </div>
-            <ul className="space-y-1.5 list-disc pl-4 text-slate-400">
+            <ul className="space-y-1.5 list-disc pl-4 text-zinc-500">
               <li>
-                <span className="text-slate-300">Invariant 1:</span> Price authority lives only in ingest parser & gate.
+                <span className="text-zinc-300">Invariant 1:</span> Price authority lives only in ingest parser & gate.
               </li>
               <li>
-                <span className="text-slate-300">Invariant 2:</span> <code className="text-emerald-400">create_checkout</code> schema accepts only <span className="text-slate-200">sku</span> and <span className="text-slate-200">qty</span>.
+                <span className="text-zinc-300">Invariant 2:</span> <code className="text-emerald-400">create_checkout</code> schema accepts only <span className="text-zinc-200">sku</span> and <span className="text-zinc-200">qty</span>.
               </li>
               <li>
-                <span className="text-slate-300">Invariant 5:</span> Money path never hard-depends on Groq. Fallback completes purchase.
+                <span className="text-zinc-300">Invariant 5:</span> Money path never hard-depends on NVIDIA NIM. Fallback completes purchase.
               </li>
             </ul>
           </div>
@@ -384,7 +384,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                   : 'bg-red-950/20 border-red-500/40'
               }`}
             >
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-800/80">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-white/10/80">
                 <div className="flex items-center gap-2">
                   {buyerResult.status === 'COMPLETED' || buyerResult.status === 'captured' ? (
                     <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
@@ -408,7 +408,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                         {buyerResult.status}
                       </span>
                     </h4>
-                    <span className="text-[11px] text-slate-400 font-mono">
+                    <span className="text-[11px] text-zinc-500 font-mono">
                       Session: {buyerResult.buyer_session_id || 'Active'}
                     </span>
                   </div>
@@ -421,9 +421,9 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                       <span>INVARIANT 5 FALLBACK USED</span>
                     </span>
                   ) : (
-                    <span className="px-2.5 py-1 rounded bg-blue-500/10 border border-blue-500/30 text-[#3395FF] text-xs font-mono font-bold flex items-center gap-1.5">
+                    <span className="px-2.5 py-1 rounded bg-blue-500/10 border border-blue-500/30 text-white text-xs font-mono font-bold flex items-center gap-1.5">
                       <Bot className="w-3.5 h-3.5" />
-                      <span>GROQ TOOL-CALLING</span>
+                      <span>NVIDIA NIM TOOL-CALLING</span>
                     </span>
                   )}
                 </div>
@@ -432,24 +432,24 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
               {/* Order Specs */}
               {buyerResult.checkout && (
                 <div className="space-y-3 font-mono text-xs">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#05070A]/80 p-3.5 rounded-lg border border-slate-800">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-black/80 p-3.5 rounded-lg border border-white/10">
                     <div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">SKU</span>
+                      <span className="text-[10px] text-zinc-600 uppercase tracking-wider block">SKU</span>
                       <span className="text-white font-bold">{buyerResult.checkout.sku}</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Quantity</span>
+                      <span className="text-[10px] text-zinc-600 uppercase tracking-wider block">Quantity</span>
                       <span className="text-white font-bold">{buyerResult.checkout.qty} unit(s)</span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Total Charged</span>
+                      <span className="text-[10px] text-zinc-600 uppercase tracking-wider block">Total Charged</span>
                       <span className="text-emerald-400 font-bold">
                         ₹{(buyerResult.checkout.total_amount_inr || (buyerResult.checkout.total_amount_paisa ? buyerResult.checkout.total_amount_paisa / 100 : 0)).toFixed(2)}
                       </span>
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider block">Remaining Budget</span>
-                      <span className="text-slate-200">
+                      <span className="text-[10px] text-zinc-600 uppercase tracking-wider block">Remaining Budget</span>
+                      <span className="text-zinc-200">
                         ₹{(buyerResult.remaining_spend_inr ?? ((buyerResult.spend_limit_inr || 5000) - (buyerResult.checkout.total_amount_inr || 0))).toFixed(2)}
                       </span>
                     </div>
@@ -457,12 +457,12 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
 
                   {/* Simulated Razorpay Credentials */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                    <div className="bg-[#05070A] p-2.5 rounded border border-slate-800 flex items-center justify-between">
-                      <span className="text-slate-500">Razorpay Order ID:</span>
-                      <span className="text-slate-200 font-bold">{buyerResult.checkout.razorpay_order_id}</span>
+                    <div className="bg-black p-2.5 rounded border border-white/10 flex items-center justify-between">
+                      <span className="text-zinc-600">Razorpay Order ID:</span>
+                      <span className="text-zinc-200 font-bold">{buyerResult.checkout.razorpay_order_id}</span>
                     </div>
-                    <div className="bg-[#05070A] p-2.5 rounded border border-slate-800 flex items-center justify-between">
-                      <span className="text-slate-500">Razorpay Payment ID:</span>
+                    <div className="bg-black p-2.5 rounded border border-white/10 flex items-center justify-between">
+                      <span className="text-zinc-600">Razorpay Payment ID:</span>
                       <span className="text-emerald-400 font-bold">{buyerResult.checkout.razorpay_payment_id}</span>
                     </div>
                   </div>
@@ -480,29 +480,29 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
           )}
 
           {/* Scrolling Transcript View */}
-          <div className="bg-[#0A0F1D] border border-slate-800 rounded-xl flex flex-col shadow-sm overflow-hidden">
+          <div className="bg-zinc-950 border border-white/10 rounded-xl flex flex-col shadow-sm overflow-hidden">
             {/* Transcript Header */}
-            <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-[#080B14]">
+            <div className="p-4 border-b border-white/10 flex items-center justify-between bg-zinc-950">
               <div className="flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-[#3395FF]" />
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+                <Terminal className="w-4 h-4 text-white" />
+                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300">
                   Observe → Reason → Act Transcript
                 </h3>
               </div>
-              <div className="text-[11px] font-mono text-slate-500">
+              <div className="text-[11px] font-mono text-zinc-600">
                 {buyerResult?.transcript ? `${buyerResult.transcript.length} step(s)` : 'Awaiting dispatch'}
               </div>
             </div>
 
             {/* Transcript Body (Scrollable) */}
-            <div className="p-4 space-y-4 max-h-[460px] overflow-y-auto font-mono text-xs bg-[#05070A]">
+            <div className="p-4 space-y-4 max-h-[460px] overflow-y-auto font-mono text-xs bg-black">
               {isRunning && (
                 <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center gap-3 text-blue-400 animate-pulse">
                   <RefreshCw className="w-4 h-4 animate-spin" />
                   <div>
                     <span className="font-bold">Autonomous loop in progress...</span>
                     <p className="text-[11px] text-blue-300/80 font-sans mt-0.5">
-                      Executing turns with Groq tool-calling against real catalog and deterministic gate.
+                      Executing turns with NVIDIA NIM tool-calling against real catalog and deterministic gate.
                     </p>
                   </div>
                 </div>
@@ -516,22 +516,22 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                     act: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
                     tool_result: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
                     final_answer: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-                  }[step.phase] || 'bg-slate-800 text-slate-300 border-slate-700';
+                  }[step.phase] || 'bg-slate-800 text-zinc-300 border-white/20';
 
                   return (
                     <div
                       key={index}
-                      className="p-3.5 rounded-lg bg-[#0A0F1D] border border-slate-800/80 space-y-2 hover:border-slate-700 transition-colors"
+                      className="p-3.5 rounded-lg bg-zinc-950 border border-white/10/80 space-y-2 hover:border-white/20 transition-colors"
                     >
                       {/* Step Header */}
-                      <div className="flex items-center justify-between text-[10px] text-slate-500 pb-1.5 border-b border-slate-800/60">
+                      <div className="flex items-center justify-between text-[10px] text-zinc-600 pb-1.5 border-b border-white/10/60">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-400">TURN {step.turn}</span>
+                          <span className="font-bold text-zinc-500">TURN {step.turn}</span>
                           <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${phaseColor}`}>
                             {step.phase}
                           </span>
                           {step.tool && (
-                            <span className="text-emerald-400 font-bold bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">
+                            <span className="text-emerald-400 font-bold bg-slate-900 px-1.5 py-0.5 rounded border border-white/10">
                               {step.tool}()
                             </span>
                           )}
@@ -543,15 +543,15 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
 
                       {/* Step Content */}
                       {step.content && (
-                        <p className="text-slate-300 font-sans text-xs leading-relaxed whitespace-pre-line">
+                        <p className="text-zinc-300 font-sans text-xs leading-relaxed whitespace-pre-line">
                           {step.content}
                         </p>
                       )}
 
                       {/* Tool Call Arguments */}
                       {step.args && (
-                        <div className="bg-[#05070A] p-2 rounded border border-slate-800 text-[11px]">
-                          <span className="text-slate-500 text-[10px] uppercase tracking-wider block mb-1">
+                        <div className="bg-black p-2 rounded border border-white/10 text-[11px]">
+                          <span className="text-zinc-600 text-[10px] uppercase tracking-wider block mb-1">
                             Arguments Sent:
                           </span>
                           <pre className="text-emerald-300 overflow-x-auto">
@@ -562,8 +562,8 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
 
                       {/* Tool Result Payload */}
                       {step.result && (
-                        <div className="bg-[#05070A] p-2 rounded border border-slate-800 text-[11px]">
-                          <span className="text-slate-500 text-[10px] uppercase tracking-wider block mb-1">
+                        <div className="bg-black p-2 rounded border border-white/10 text-[11px]">
+                          <span className="text-zinc-600 text-[10px] uppercase tracking-wider block mb-1">
                             Tool Result:
                           </span>
                           <pre className="text-cyan-300 overflow-x-auto max-h-36">
@@ -577,7 +577,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
               ) : !isRunning ? (
                 <div className="text-center py-16 text-slate-600 space-y-2">
                   <Bot className="w-8 h-8 mx-auto text-slate-700" />
-                  <p className="font-sans text-xs text-slate-500">
+                  <p className="font-sans text-xs text-zinc-600">
                     No active buyer transcript yet.
                   </p>
                   <p className="text-[11px] text-slate-600 font-mono">

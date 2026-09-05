@@ -1,9 +1,11 @@
 # Aisle — Agent-Readable Merchant Catalog & Deterministic Price Gate
+
 **Simulated Razorpay test-mode IDs (order_sim_/pay_sim_) — no live keys.**
 
-Aisle is an agent-readable merchant catalog with a deterministic price lock and an autonomous AI buyer (powered by Groq `llama-3.3-70b-versatile`) that completes simulated Razorpay test-mode payments under a strict corporate spend mandate. The model shops, the rules pay.
+Aisle is an agent-readable merchant catalog with a deterministic price lock and an autonomous AI buyer (powered by NVIDIA NIM) that completes simulated Razorpay test-mode payments under a strict corporate spend mandate. The model shops, the rules pay.
 
 ## The 6 Non-Negotiable Invariants
+
 | Inv | Rule | Enforcement |
 |---|---|---|
 | 1 | Price authority lives only in ingest parser + gate. | LLM never writes a charged number. |
@@ -13,7 +15,36 @@ Aisle is an agent-readable merchant catalog with a deterministic price lock and 
 | 5 | LLM API down -> rule-based fallback buyer completes purchase. | Money path never hard-depends on LLM. |
 | 6 | Test mode only. | Simulated IDs (order_sim_ / pay_sim_). |
 
+## Architecture: The Deterministic Boundary
+
+```mermaid
+sequenceDiagram
+    participant LLM as NVIDIA NIM (AI Buyer)
+    participant Gate as Aisle Deterministic Gate
+    participant DB as SQLite (Audit & Stock)
+    participant RZP as Razorpay (Test Mode)
+
+    Note over LLM,Gate: Probabilistic Intent
+    LLM->>Gate: search_catalog(query="coffee")
+    Gate-->>LLM: Returns locked prices & stock
+    
+    Note over Gate,RZP: Deterministic Execution
+    LLM->>Gate: create_checkout(sku="SKU-1", qty=2, price=1.00)
+    Gate->>Gate: INVARIANT 2: Reject price override payload!
+    Gate->>DB: Write ATTACK_BLOCKED to audit_log
+    Gate-->>LLM: 400 Bad Request (Attack Blocked)
+    
+    LLM->>Gate: create_checkout(sku="SKU-1", qty=2)
+    Gate->>DB: BEGIN IMMEDIATE (Lock DB)
+    Gate->>Gate: Verify Locked Price, Stock, Spend Ceiling
+    Gate->>DB: Decrement Stock, Increment Spend
+    Gate->>RZP: Generate order_sim_* / pay_sim_*
+    Gate->>DB: Write SUCCESS to audit_log & Commit
+    Gate-->>LLM: 200 OK (Checkout Captured)
+```
+
 ## Setup & Run
+
 ```bash
 # Backend
 python -m venv venv && source venv/bin/activate
@@ -25,13 +56,6 @@ npm install
 npm run dev
 ```
 
-## LLM Provider & Architecture
-- **Buyer Model**: Groq API using `llama-3.3-70b-versatile` with OpenAI-compatible tool calling.
-- **Deterministic Gate**: Local Python / FastAPI / SQLite transaction layer guaranteeing zero hallucinated prices or rogue discounts.
-- **Failover**: If the LLM is unreachable, the local rule-based fallback buyer deterministically completes the purchase (Invariant 5).
+## What broke and how we got out
 
-## What Broke and How We Got Out
-- **Messy INR formats → Rule parser**: Real merchant CSVs contain varied formats (`Rs. 450`, `₹1,299.00`, `INR 850/-`, strings with trailing whitespace). Handing raw price parsing to an LLM caused numerical inconsistencies and hallucinations. *Fix*: Engineered a deterministic rule-based regex parser (`backend/inr_parser.py`) converting all values strictly into integer paise at catalog ingest.
-- **Model filling missing prices → Gate mismatch reject**: Incomplete catalog items invited agents to guess price amounts. *Fix*: Mandatory deterministic price locking (`CatalogItem.is_locked = True`, `locked_price_paisa = canonical_paisa`). Unlocked items fail Rule 1 check and are hard-rejected before payment creation.
-- **LLM down or timeout → Fallback buyer**: Relying solely on external LLM inference makes the commerce flow brittle. *Fix*: Implemented an autonomous rule-based fallback buyer (`backend/buyer.py`) that filters locked, in-stock SKUs and directly dispatches `create_checkout(sku, qty)` within the spend mandate.
-- **Invented discounts or price overrides → Hard reject & attack audit**: An agent or user might inject `discount: 0.9` or `unit_price: 1`. *Fix*: The checkout gate strictly validates that payloads contain ONLY `sku`, `qty`, and `buyer_session_id`. Any extra field triggers immediate HTTP 400 rejection and writes an `ATTACK_BLOCKED` audit log row.
+LLMs hallucinate prices and ignore spend mandates when acting as autonomous buyers. We built a deterministic ingest gate that locks prices to source cells, and a strict checkout gate that rejects any tool-call attempting to inject a price or discount. When the LLM API failed, our rule-based fallback buyer completed the purchase, proving the money path never hard-depends on the model.

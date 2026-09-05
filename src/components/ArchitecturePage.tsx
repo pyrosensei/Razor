@@ -216,26 +216,29 @@ export const ArchitecturePage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
       {/* Page Header */}
-      <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="border-b border-white/10 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-widest bg-[#3395FF]/10 text-[#3395FF] border border-[#3395FF]/30">
-              System Architecture
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-widest bg-white/10 text-white border border-white/30/30">
+              System Architecture</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 ml-2">
+              Buyer LLM: NVIDIA Nemotron (via NIM)
+            
             </span>
             <span className="text-slate-600 font-mono text-xs">// Phase 3 & 4 Verification</span>
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight mt-1 flex items-center gap-2.5">
-            <Workflow className="w-6 h-6 text-[#3395FF]" />
+            <Workflow className="w-6 h-6 text-white" />
             Aisle Architecture & Governance Boundaries
           </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-3xl">
+          <p className="text-sm text-zinc-500 mt-1 max-w-3xl">
             Core thesis: <strong className="text-white font-mono">"The model shops. The rules pay."</strong> Probabilistic AI reasons about product selection and user intent; deterministic rules retain absolute authority over price, budget, inventory, and payment.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="px-3 py-2 rounded-lg bg-[#080B14] border border-slate-800 text-right">
-            <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Enforcement Mode</div>
+          <div className="px-3 py-2 rounded-lg bg-zinc-950 border border-white/10 text-right">
+            <div className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Enforcement Mode</div>
             <div className="text-xs font-mono font-bold text-emerald-400 flex items-center justify-end gap-1.5 mt-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               Deterministic Gate Active
@@ -245,22 +248,22 @@ export const ArchitecturePage: React.FC = () => {
       </div>
 
       {/* SECTION D: Plain-English Architecture Explanation */}
-      <section className="bg-[#080B14] rounded-xl border border-slate-800 overflow-hidden shadow-xl">
-        <div className="px-6 py-4 bg-[#0A0F1D] border-b border-slate-800 flex items-center justify-between">
+      <section className="bg-zinc-950 rounded-xl border border-white/10 overflow-hidden shadow-xl">
+        <div className="px-6 py-4 bg-zinc-950 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <FileSpreadsheet className="w-4 h-4 text-[#3395FF]" />
+            <FileSpreadsheet className="w-4 h-4 text-white" />
             <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-white">
               End-to-End Flow & Plain-English Explanation
             </h2>
           </div>
-          <span className="text-[11px] font-mono text-slate-500 uppercase">Invariant 1 - 6 Pipeline</span>
+          <span className="text-[11px] font-mono text-zinc-600 uppercase">Invariant 1 - 6 Pipeline</span>
         </div>
 
         <div className="p-6 space-y-6">
           {/* Visual Step Pills */}
           <div className="grid grid-cols-2 md:grid-cols-7 gap-2">
             {[
-              { step: '1', title: 'Merchant CSV', desc: 'Raw product data', color: 'border-slate-700 bg-slate-900/60 text-slate-300' },
+              { step: '1', title: 'Merchant CSV', desc: 'Raw product data', color: 'border-white/20 bg-slate-900/60 text-zinc-300' },
               { step: '2', title: 'Deterministic Gate', desc: 'INR parser & lock', color: 'border-blue-500/40 bg-blue-950/20 text-blue-400' },
               { step: '3', title: 'Locked Catalog', desc: 'Immutable paise', color: 'border-emerald-500/40 bg-emerald-950/20 text-emerald-400' },
               { step: '4', title: 'AI Buyer Agent', desc: 'Persona & reasoning', color: 'border-indigo-500/40 bg-indigo-950/20 text-indigo-300' },
@@ -278,14 +281,14 @@ export const ArchitecturePage: React.FC = () => {
                 </div>
                 <div className="mt-2">
                   <div className="text-xs font-bold font-mono tracking-tight">{node.title}</div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">{node.desc}</div>
+                  <div className="text-[10px] text-zinc-500 mt-0.5">{node.desc}</div>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Plain English Paragraph */}
-          <div className="p-4 rounded-lg bg-[#05070A] border border-slate-800 text-slate-300 text-sm leading-relaxed">
+          <div className="p-4 rounded-lg bg-black border border-white/10 text-zinc-300 text-sm leading-relaxed">
             <p className="font-sans">
               A merchant uploads a standard product CSV. Rather than trusting an AI to interpret financial terms or prices, a deterministic parser validates every rupee and locks in the canonical prices in paise within a secure database. When an AI shopping agent searches for products, it is completely free to reason about customer intent, compare features, and pick items. But when it decides to buy, its checkout tool accepts <em>strictly only the SKU and quantity</em>. A strict deterministic checkout gate intercepts the request and verifies that the item price is locked, inventory exists, no discounts have been smuggled in, and the total cost fits inside the buyer's spend mandate. Only after all checks pass does the system generate a simulated Razorpay test payment and record an immutable event in the audit log. In short: <strong>the model shops; the rules pay.</strong>
             </p>
@@ -294,10 +297,10 @@ export const ArchitecturePage: React.FC = () => {
       </section>
 
       {/* SECTION A: Deterministic vs Probabilistic Matrix */}
-      <section className="bg-[#080B14] rounded-xl border border-slate-800 overflow-hidden shadow-xl">
-        <div className="px-6 py-4 bg-[#0A0F1D] border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <section className="bg-zinc-950 rounded-xl border border-white/10 overflow-hidden shadow-xl">
+        <div className="px-6 py-4 bg-zinc-950 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-[#3395FF]" />
+            <Layers className="w-4 h-4 text-white" />
             <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-white">
               Deterministic vs. Probabilistic Architecture Division
             </h2>
@@ -319,7 +322,7 @@ export const ArchitecturePage: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-sans">
               <thead>
-                <tr className="border-b border-slate-800 text-slate-400 font-mono text-[11px] uppercase tracking-wider bg-slate-900/40">
+                <tr className="border-b border-white/10 text-zinc-500 font-mono text-[11px] uppercase tracking-wider bg-slate-900/40">
                   <th className="py-3 px-4">Component / Action</th>
                   <th className="py-3 px-4">Paradigm</th>
                   <th className="py-3 px-4">Execution Engine</th>
@@ -354,7 +357,7 @@ export const ArchitecturePage: React.FC = () => {
                         {row.type}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-300 text-[11px]">{row.engine}</td>
+                    <td className="py-3 px-4 text-zinc-300 text-[11px]">{row.engine}</td>
                     <td className="py-3 px-4">
                       <span
                         className={`text-[11px] font-bold ${
@@ -364,7 +367,7 @@ export const ArchitecturePage: React.FC = () => {
                         {row.authority}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-400 text-xs font-sans max-w-md">
+                    <td className="py-3 px-4 text-zinc-500 text-xs font-sans max-w-md">
                       {row.description}
                     </td>
                   </tr>
@@ -373,8 +376,8 @@ export const ArchitecturePage: React.FC = () => {
             </table>
           </div>
 
-          <div className="p-3.5 rounded-lg bg-[#05070A] border border-slate-800 flex items-start gap-3 text-xs text-slate-400">
-            <Info className="w-4 h-4 text-[#3395FF] shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-lg bg-black border border-white/10 flex items-start gap-3 text-xs text-zinc-500">
+            <Info className="w-4 h-4 text-white shrink-0 mt-0.5" />
             <div>
               <strong className="text-white font-mono">Architectural Guarantee:</strong> Even if the probabilistic NVIDIA NIM model hallucinates a price of ₹1.00 or invents a 90% coupon, the deterministic execution engine enforces strict database prices and immediate attack blocking. The model can never write the monetary number charged.
             </div>
@@ -383,10 +386,10 @@ export const ArchitecturePage: React.FC = () => {
       </section>
 
       {/* SECTION B: Three MCP-style Tools & Schemas */}
-      <section className="bg-[#080B14] rounded-xl border border-slate-800 overflow-hidden shadow-xl">
-        <div className="px-6 py-4 bg-[#0A0F1D] border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <section className="bg-zinc-950 rounded-xl border border-white/10 overflow-hidden shadow-xl">
+        <div className="px-6 py-4 bg-zinc-950 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Code className="w-4 h-4 text-[#3395FF]" />
+            <Code className="w-4 h-4 text-white" />
             <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-white">
               MCP / NVIDIA NIM Model-Facing Tool Definitions
             </h2>
@@ -397,22 +400,22 @@ export const ArchitecturePage: React.FC = () => {
         </div>
 
         <div className="p-6 space-y-6">
-          <div className="p-4 rounded-lg bg-[#05070A] border border-slate-800 text-xs text-slate-300 leading-relaxed">
+          <div className="p-4 rounded-lg bg-black border border-white/10 text-xs text-zinc-300 leading-relaxed">
             <p>
               The LLM buyer operates through three OpenAI-compatible function-calling tools via NVIDIA NIM. Notice that <strong className="text-emerald-400 font-mono">create_checkout</strong> accepts strictly only <code className="text-amber-300 font-mono">sku</code> and <code className="text-amber-300 font-mono">qty</code>. Price and discount parameters are completely absent from the tool definition schema (Invariant 2).
             </p>
           </div>
 
           {/* Tool Navigation Tabs */}
-          <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-3">
+          <div className="flex flex-wrap gap-2 border-b border-white/10 pb-3">
             {BUYER_TOOLS.map((tool) => (
               <button
                 key={tool.name}
                 onClick={() => setActiveToolTab(tool.name as any)}
                 className={`px-3.5 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
                   activeToolTab === tool.name
-                    ? 'bg-[#3395FF] text-white shadow-md shadow-blue-500/20'
-                    : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+                    ? 'bg-white text-black shadow-md shadow-blue-500/20'
+                    : 'bg-slate-900 text-zinc-500 hover:text-zinc-200 border border-white/10'
                 }`}
               >
                 <Terminal className="w-3.5 h-3.5" />
@@ -426,8 +429,8 @@ export const ArchitecturePage: React.FC = () => {
               onClick={() => setActiveToolTab('all')}
               className={`px-3.5 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider transition-all ${
                 activeToolTab === 'all'
-                  ? 'bg-[#3395FF] text-white shadow-md shadow-blue-500/20'
-                  : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+                  ? 'bg-white text-black shadow-md shadow-blue-500/20'
+                  : 'bg-slate-900 text-zinc-500 hover:text-zinc-200 border border-white/10'
               }`}
             >
               View Complete TOOLS_DEFINITION Array
@@ -437,7 +440,7 @@ export const ArchitecturePage: React.FC = () => {
           {/* Active Tool Details */}
           {activeToolTab !== 'all' && selectedTool ? (
             <div className="space-y-4">
-              <div className="p-4 rounded-lg bg-slate-950/80 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="p-4 rounded-lg bg-slate-950/80 border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2">
                     <h3 className="text-base font-bold font-mono text-white">{selectedTool.name}</h3>
@@ -445,11 +448,11 @@ export const ArchitecturePage: React.FC = () => {
                       {selectedTool.badge}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1 font-sans">{selectedTool.description}</p>
+                  <p className="text-xs text-zinc-500 mt-1 font-sans">{selectedTool.description}</p>
                 </div>
                 <button
                   onClick={() => handleCopy(JSON.stringify(selectedTool.schema, null, 2), selectedTool.name)}
-                  className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition-colors self-start md:self-auto shrink-0"
+                  className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-zinc-300 text-xs font-mono flex items-center gap-1.5 transition-colors self-start md:self-auto shrink-0"
                 >
                   {copiedTool === selectedTool.name ? (
                     <>
@@ -458,7 +461,7 @@ export const ArchitecturePage: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-slate-400" />
+                      <Copy className="w-3.5 h-3.5 text-zinc-500" />
                       <span>Copy Schema</span>
                     </>
                   )}
@@ -466,21 +469,21 @@ export const ArchitecturePage: React.FC = () => {
               </div>
 
               {/* Parameter Table */}
-              <div className="p-4 rounded-lg bg-[#05070A] border border-slate-800">
-                <div className="text-xs font-mono uppercase text-slate-400 font-bold mb-2">Parameters Schema</div>
+              <div className="p-4 rounded-lg bg-black border border-white/10">
+                <div className="text-xs font-mono uppercase text-zinc-500 font-bold mb-2">Parameters Schema</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {Object.entries(selectedTool.schema.function.parameters.properties).map(([key, prop]: [string, any]) => (
-                    <div key={key} className="p-3 rounded bg-slate-900/60 border border-slate-800">
+                    <div key={key} className="p-3 rounded bg-slate-900/60 border border-white/10">
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-bold text-[#3395FF]">{key}</span>
-                        <span className="text-[10px] font-mono text-slate-500 uppercase">{prop.type}</span>
+                        <span className="font-mono text-xs font-bold text-white">{key}</span>
+                        <span className="text-[10px] font-mono text-zinc-600 uppercase">{prop.type}</span>
                       </div>
-                      <p className="text-xs text-slate-400 mt-1">{prop.description}</p>
+                      <p className="text-xs text-zinc-500 mt-1">{prop.description}</p>
                       <div className="mt-2 text-[10px] font-mono">
                         {selectedTool.schema.function.parameters.required.includes(key) ? (
                           <span className="text-amber-400 font-bold">REQUIRED</span>
                         ) : (
-                          <span className="text-slate-500">OPTIONAL</span>
+                          <span className="text-zinc-600">OPTIONAL</span>
                         )}
                       </div>
                     </div>
@@ -499,10 +502,10 @@ export const ArchitecturePage: React.FC = () => {
 
               {/* Raw JSON Schema Preview */}
               <div className="relative">
-                <div className="absolute top-2 right-2 text-[10px] font-mono text-slate-500 uppercase bg-slate-900/80 px-2 py-1 rounded">
+                <div className="absolute top-2 right-2 text-[10px] font-mono text-zinc-600 uppercase bg-slate-900/80 px-2 py-1 rounded">
                   JSON Schema
                 </div>
-                <pre className="p-4 rounded-lg bg-[#05070A] border border-slate-800 text-slate-300 font-mono text-xs overflow-x-auto">
+                <pre className="p-4 rounded-lg bg-black border border-white/10 text-zinc-300 font-mono text-xs overflow-x-auto">
                   {JSON.stringify(selectedTool.schema, null, 2)}
                 </pre>
               </div>
@@ -510,10 +513,10 @@ export const ArchitecturePage: React.FC = () => {
           ) : (
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-mono text-slate-400">All 3 Function Definitions</span>
+                <span className="text-xs font-mono text-zinc-500">All 3 Function Definitions</span>
                 <button
                   onClick={() => handleCopy(JSON.stringify(BUYER_TOOLS.map(t => t.schema), null, 2), 'all')}
-                  className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-zinc-300 text-xs font-mono flex items-center gap-1.5 transition-colors"
                 >
                   {copiedTool === 'all' ? (
                     <>
@@ -522,13 +525,13 @@ export const ArchitecturePage: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5 text-slate-400" />
+                      <Copy className="w-3.5 h-3.5 text-zinc-500" />
                       <span>Copy Full Tools Array</span>
                     </>
                   )}
                 </button>
               </div>
-              <pre className="p-4 rounded-lg bg-[#05070A] border border-slate-800 text-slate-300 font-mono text-xs overflow-x-auto max-h-96">
+              <pre className="p-4 rounded-lg bg-black border border-white/10 text-zinc-300 font-mono text-xs overflow-x-auto max-h-96">
                 {JSON.stringify(BUYER_TOOLS.map(t => t.schema), null, 2)}
               </pre>
             </div>
@@ -537,8 +540,8 @@ export const ArchitecturePage: React.FC = () => {
       </section>
 
       {/* SECTION C: "What Broke" in Agentic Commerce (Original Buildathon Context) */}
-      <section className="bg-[#080B14] rounded-xl border border-slate-800 overflow-hidden shadow-xl">
-        <div className="px-6 py-4 bg-[#0A0F1D] border-b border-slate-800 flex items-center justify-between">
+      <section className="bg-zinc-950 rounded-xl border border-white/10 overflow-hidden shadow-xl">
+        <div className="px-6 py-4 bg-zinc-950 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-amber-400" />
             <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-white">
@@ -559,12 +562,12 @@ export const ArchitecturePage: React.FC = () => {
 
           {/* What Broke Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg bg-[#05070A] border border-red-950/50 space-y-2">
+            <div className="p-4 rounded-lg bg-black border border-red-950/50 space-y-2">
               <div className="flex items-center gap-2 text-red-400 text-xs font-mono font-bold uppercase">
                 <XCircle className="w-4 h-4 shrink-0" />
                 <span>1. Model Dictates the Charged Price</span>
               </div>
-              <p className="text-xs text-slate-300 font-sans">
+              <p className="text-xs text-zinc-300 font-sans">
                 In naive agentic checkout systems, the AI buyer passes <code className="text-amber-300 font-mono">{"price: 1.00"}</code> or hallucinates lower rates, causing merchants to lose revenue when the checkout API blind trusts the model's parameters.
               </p>
               <div className="text-[11px] font-mono text-emerald-400 pt-1">
@@ -572,12 +575,12 @@ export const ArchitecturePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-lg bg-[#05070A] border border-red-950/50 space-y-2">
+            <div className="p-4 rounded-lg bg-black border border-red-950/50 space-y-2">
               <div className="flex items-center gap-2 text-red-400 text-xs font-mono font-bold uppercase">
                 <XCircle className="w-4 h-4 shrink-0" />
                 <span>2. Unauthorized Discount / Promo Code Injection</span>
               </div>
-              <p className="text-xs text-slate-300 font-sans">
+              <p className="text-xs text-zinc-300 font-sans">
                 Models generate fictional coupons or inject <code className="text-amber-300 font-mono">{"discount: 0.90"}</code> into tool payloads, circumventing merchant promotional rules.
               </p>
               <div className="text-[11px] font-mono text-emerald-400 pt-1">
@@ -585,12 +588,12 @@ export const ArchitecturePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-lg bg-[#05070A] border border-red-950/50 space-y-2">
+            <div className="p-4 rounded-lg bg-black border border-red-950/50 space-y-2">
               <div className="flex items-center gap-2 text-red-400 text-xs font-mono font-bold uppercase">
                 <XCircle className="w-4 h-4 shrink-0" />
                 <span>3. Inventory Oversell & Ghost Stock</span>
               </div>
-              <p className="text-xs text-slate-300 font-sans">
+              <p className="text-xs text-zinc-300 font-sans">
                 Agents hallucinate warehouse availability, ordering quantities exceeding merchant on-hand inventory and triggering downstream fulfillment failures.
               </p>
               <div className="text-[11px] font-mono text-emerald-400 pt-1">
@@ -598,12 +601,12 @@ export const ArchitecturePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-lg bg-[#05070A] border border-red-950/50 space-y-2">
+            <div className="p-4 rounded-lg bg-black border border-red-950/50 space-y-2">
               <div className="flex items-center gap-2 text-red-400 text-xs font-mono font-bold uppercase">
                 <XCircle className="w-4 h-4 shrink-0" />
                 <span>4. Spend Mandate Breach</span>
               </div>
-              <p className="text-xs text-slate-300 font-sans">
+              <p className="text-xs text-zinc-300 font-sans">
                 Autonomous agents purchase luxury items or bulk orders without budgetary boundaries, depleting corporate accounts beyond delegated authority.
               </p>
               <div className="text-[11px] font-mono text-emerald-400 pt-1">
@@ -611,13 +614,13 @@ export const ArchitecturePage: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-lg bg-[#05070A] border border-red-950/50 space-y-2 md:col-span-2">
+            <div className="p-4 rounded-lg bg-black border border-red-950/50 space-y-2 md:col-span-2">
               <div className="flex items-center gap-2 text-red-400 text-xs font-mono font-bold uppercase">
                 <XCircle className="w-4 h-4 shrink-0" />
                 <span>5. Payment Pipeline Halts When LLM Fails</span>
               </div>
-              <p className="text-xs text-slate-300 font-sans">
-                When external LLM providers (Groq/OpenAI) experience rate limits, outages, or timeouts, entire agentic commerce flows collapse and revenue halts completely.
+              <p className="text-xs text-zinc-300 font-sans">
+                When external LLM providers (NVIDIA NIM/OpenAI) experience rate limits, outages, or timeouts, entire agentic commerce flows collapse and revenue halts completely.
               </p>
               <div className="text-[11px] font-mono text-emerald-400 pt-1">
                 Aisle Fix: Invariant 5 — Deterministic local rule-based fallback buyer takes over instantly; logged with event_type="fallback_triggered".
@@ -628,7 +631,7 @@ export const ArchitecturePage: React.FC = () => {
       </section>
 
       {/* Six Non-Negotiable Invariants Quick-Check Banner */}
-      <section className="p-6 rounded-xl bg-gradient-to-r from-[#080B14] via-[#0A0F1D] to-[#080B14] border border-slate-800">
+      <section className="p-6 rounded-xl bg-gradient-to-r from-[#080B14] via-[#0A0F1D] to-[#080B14] border border-white/10">
         <div className="flex items-center gap-2 mb-4">
           <ShieldCheck className="w-5 h-5 text-emerald-400" />
           <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-white">
@@ -636,22 +639,22 @@ export const ArchitecturePage: React.FC = () => {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-          <div className="p-3 rounded bg-[#05070A] border border-slate-800">
+          <div className="p-3 rounded bg-black border border-white/10">
             <span className="text-emerald-400 font-bold">INVARIANT 1:</span> Price authority lives only in ingest parser + gate.
           </div>
-          <div className="p-3 rounded bg-[#05070A] border border-slate-800">
+          <div className="p-3 rounded bg-black border border-white/10">
             <span className="text-emerald-400 font-bold">INVARIANT 2:</span> create_checkout accepts ONLY sku & qty.
           </div>
-          <div className="p-3 rounded bg-[#05070A] border border-slate-800">
+          <div className="p-3 rounded bg-black border border-white/10">
             <span className="text-emerald-400 font-bold">INVARIANT 3:</span> Check order: Locked → Stock → Spend → No Discount.
           </div>
-          <div className="p-3 rounded bg-[#05070A] border border-slate-800">
+          <div className="p-3 rounded bg-black border border-white/10">
             <span className="text-emerald-400 font-bold">INVARIANT 4:</span> Every lock, reject, block, & capture writes audit_log.
           </div>
-          <div className="p-3 rounded bg-[#05070A] border border-slate-800">
+          <div className="p-3 rounded bg-black border border-white/10">
             <span className="text-emerald-400 font-bold">INVARIANT 5:</span> LLM failure triggers local rule fallback buyer.
           </div>
-          <div className="p-3 rounded bg-[#05070A] border border-slate-800">
+          <div className="p-3 rounded bg-black border border-white/10">
             <span className="text-emerald-400 font-bold">INVARIANT 6:</span> Razorpay test mode only (order_sim_, pay_sim_).
           </div>
         </div>

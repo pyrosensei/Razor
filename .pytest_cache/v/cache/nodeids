@@ -1,6 +1,8 @@
 [
   "backend/test_buyer_loop.py::test_buyer_run_env_var_fallback",
   "backend/test_buyer_loop.py::test_buyer_run_fallback_simulation",
+  "backend/test_buyer_loop.py::test_system_reset_audit_trail_preservation",
   "backend/test_buyer_loop.py::test_tool_definitions_schema_invariant",
+  "backend/test_buyer_loop.py::test_unlock_price_sku_not_found_audit",
   "backend/test_invariants.py::test_invariants"
 ]

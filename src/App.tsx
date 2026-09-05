@@ -184,7 +184,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#05070A] text-slate-300 font-sans selection:bg-[#3395FF]/30 selection:text-white">
+    <div className="flex flex-col min-h-screen bg-black text-zinc-300 font-sans selection:bg-white/30 selection:text-white">
       {/* Header */}
       <Header
         mandate={mandate}
@@ -199,7 +199,7 @@ export default function App() {
       {/* Main Content: Catalog Ingest vs AI Buyer Agent vs Live Commerce Cockpit */}
       {mainView === 'catalog' ? (
         <main className="flex-1 grid grid-cols-12 gap-0">
-          <section className="col-span-12 xl:col-span-8 p-6 border-b xl:border-b-0 xl:border-r border-slate-800 bg-[#05070A] overflow-y-auto">
+          <section className="col-span-12 xl:col-span-8 p-6 border-b xl:border-b-0 xl:border-r border-white/10 bg-black overflow-y-auto">
             <CatalogIngest
               catalog={catalog}
               onRefresh={fetchData}
@@ -207,7 +207,7 @@ export default function App() {
             />
           </section>
 
-          <section className="col-span-12 xl:col-span-4 bg-[#080B14] p-6 space-y-4 flex flex-col">
+          <section className="col-span-12 xl:col-span-4 bg-zinc-950 p-6 space-y-4 flex flex-col">
             <SpendMandateCard
               mandate={mandate}
               onUpdateCeiling={handleUpdateMandateCeiling}
@@ -224,27 +224,27 @@ export default function App() {
           </section>
         </main>
       ) : mainView === 'buyer' ? (
-        <main className="flex-1 bg-[#05070A] overflow-y-auto">
+        <main className="flex-1 bg-black overflow-y-auto">
           <BuyerPage
             mandate={mandate}
             onRefreshData={fetchData}
           />
         </main>
       ) : mainView === 'lab' ? (
-        <main className="flex-1 bg-[#05070A] overflow-y-auto">
+        <main className="flex-1 bg-black overflow-y-auto">
           <SecurityLabPage
             mandate={mandate}
             onRefreshData={fetchData}
           />
         </main>
       ) : mainView === 'architecture' ? (
-        <main className="flex-1 bg-[#05070A] overflow-y-auto">
+        <main className="flex-1 bg-black overflow-y-auto">
           <ArchitecturePage />
         </main>
       ) : (
         <main className="flex-1 grid grid-cols-12 gap-0">
           {/* Left Column: Catalog & AI Buyer / Attack Simulator */}
-          <section className="col-span-12 xl:col-span-7 flex flex-col border-b xl:border-b-0 xl:border-r border-slate-800 bg-[#05070A]">
+          <section className="col-span-12 xl:col-span-7 flex flex-col border-b xl:border-b-0 xl:border-r border-white/10 bg-black">
             {/* Catalog View */}
             <div className="flex-1">
               <MerchantCatalog
@@ -258,14 +258,14 @@ export default function App() {
             </div>
 
             {/* Interactive Console Tabs: Buyer Engine vs Attack Harness */}
-            <div className="p-6 pt-0 border-t border-slate-800/80 bg-[#05070A]">
+            <div className="p-6 pt-0 border-t border-white/10/80 bg-black">
               <div className="flex items-center gap-2 mb-3 pt-4">
                 <button
                   onClick={() => setActiveTab('buyer')}
                   className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase tracking-wider transition-colors ${
                     activeTab === 'buyer'
-                      ? 'bg-[#3395FF] text-white'
-                      : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+                      ? 'bg-white text-black'
+                      : 'bg-slate-900 text-zinc-500 hover:text-zinc-200 border border-white/10'
                   }`}
                 >
                   AI Buyer Console (Invariant 1 & 5)
@@ -275,7 +275,7 @@ export default function App() {
                   className={`px-3 py-1.5 rounded text-xs font-mono font-bold uppercase tracking-wider transition-colors ${
                     activeTab === 'attack'
                       ? 'bg-red-600 text-white'
-                      : 'bg-slate-900 text-slate-400 hover:text-red-400 border border-slate-800'
+                      : 'bg-slate-900 text-zinc-500 hover:text-red-400 border border-white/10'
                   }`}
                 >
                   Attack Simulator (Invariant 2 Proof)
@@ -299,7 +299,7 @@ export default function App() {
           </section>
 
           {/* Right Column: Mandate Governor, Immutable Audit Log & Gate Protocol */}
-          <section className="col-span-12 xl:col-span-5 bg-[#080B14] flex flex-col p-6 space-y-4">
+          <section className="col-span-12 xl:col-span-5 bg-zinc-950 flex flex-col p-6 space-y-4">
             <SpendMandateCard
               mandate={mandate}
               onUpdateCeiling={handleUpdateMandateCeiling}
@@ -320,12 +320,12 @@ export default function App() {
       )}
 
       {/* Footer */}
-      <footer className="px-6 py-3 bg-[#05070A] border-t border-slate-800 flex flex-wrap justify-between items-center text-[10px] font-mono text-slate-500 uppercase tracking-widest gap-2">
+      <footer className="px-6 py-3 bg-black border-t border-white/10 flex flex-wrap justify-between items-center text-[10px] font-mono text-zinc-600 uppercase tracking-widest gap-2">
         <div>SYSTEM_ID: AISLE-01-RAZORPAY-BUILDATHON</div>
         <div className="flex flex-wrap gap-4">
           <span>BACKEND: FASTAPI_PY</span>
-          <span className="text-[#3395FF]">GATE: DETERMINISTIC_LOCK</span>
-          <span>LLM: GROQ_TOOL_CALLING</span>
+          <span className="text-white">GATE: DETERMINISTIC_LOCK</span>
+          <span>LLM: NVIDIA_NIM_TOOL_CALLING</span>
           <span className="text-emerald-400">TEST_MODE: SIM_ORDERS</span>
         </div>
       </footer>

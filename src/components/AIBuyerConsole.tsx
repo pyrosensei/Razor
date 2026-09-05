@@ -34,15 +34,15 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
   };
 
   return (
-    <div className="bg-[#000] border border-slate-800 rounded-lg p-5 font-mono text-[11px] leading-relaxed shadow-inner">
+    <div className="bg-[#000] border border-white/10 rounded-lg p-5 font-mono text-[11px] leading-relaxed shadow-inner">
       {/* Title & Engine Mode */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-900">
         <div className="flex items-center gap-2">
-          <Bot className="w-4 h-4 text-[#3395FF]" />
-          <span className="font-bold text-slate-300 uppercase tracking-wider text-xs">
+          <Bot className="w-4 h-4 text-white" />
+          <span className="font-bold text-zinc-300 uppercase tracking-wider text-xs">
             Autonomous Buyer Engine
           </span>
-          <span className="text-[10px] text-slate-500 font-normal">
+          <span className="text-[10px] text-zinc-600 font-normal">
             (The model shops, the rules pay)
           </span>
         </div>
@@ -51,7 +51,7 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
           <button
             type="button"
             onClick={() => setShowConfig(!showConfig)}
-            className="text-[10px] text-slate-400 hover:text-slate-200 underline"
+            className="text-[10px] text-zinc-500 hover:text-zinc-200 underline"
           >
             {showConfig ? 'Hide Config' : 'Engine Settings'}
           </button>
@@ -62,7 +62,7 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
                 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30 animate-pulse'
                 : buyerResult?.status === 'SUCCESS'
                 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                : 'bg-slate-900 text-slate-400 border border-slate-800'
+                : 'bg-slate-900 text-zinc-500 border border-white/10'
             }`}
           >
             <span
@@ -77,10 +77,10 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
 
       {/* Optional Configuration Area */}
       {showConfig && (
-        <div className="mb-4 p-3 bg-slate-900/60 border border-slate-800 rounded text-xs space-y-2">
+        <div className="mb-4 p-3 bg-slate-900/60 border border-white/10 rounded text-xs space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-slate-300 font-sans text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-[#3395FF]" />
+            <label className="text-zinc-300 font-sans text-xs flex items-center gap-1.5">
+              <Cpu className="w-3.5 h-3.5 text-white" />
               <span>Force Invariant 5 Rule-Based Fallback Buyer</span>
             </label>
             <input
@@ -90,12 +90,12 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
               className="accent-[#3395FF] cursor-pointer"
             />
           </div>
-          <p className="text-[10px] text-slate-500 font-mono">
-            Invariant 5: If Groq LLM is unreachable or key is unset, local deterministic buyer completes the purchase safely.
+          <p className="text-[10px] text-zinc-600 font-mono">
+            Invariant 5: If NVIDIA NIM is unreachable or key is unset, local deterministic buyer completes the purchase safely.
           </p>
 
-          <div className="pt-2 border-t border-slate-800">
-            <label className="block text-[10px] text-slate-400 uppercase tracking-wider mb-1 font-mono">
+          <div className="pt-2 border-t border-white/10">
+            <label className="block text-[10px] text-zinc-500 uppercase tracking-wider mb-1 font-mono">
               NVIDIA NIM API Key (Optional — fallback buyer used if empty):
             </label>
             <input
@@ -103,7 +103,7 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
               value={groqApiKey}
               onChange={(e) => setGroqApiKey(e.target.value)}
               placeholder="nvapi-..."
-              className="w-full bg-[#05070A] border border-slate-800 text-slate-200 px-3 py-1 rounded text-xs focus:outline-none focus:border-[#3395FF] font-mono"
+              className="w-full bg-black border border-white/10 text-zinc-200 px-3 py-1 rounded text-xs focus:outline-none focus:border-white/30 font-mono"
             />
           </div>
         </div>
@@ -111,13 +111,13 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
 
       {/* Preset Intent Chips */}
       <div className="flex flex-wrap items-center gap-1.5 mb-3">
-        <span className="text-[10px] text-slate-500 uppercase tracking-wider mr-1">Quick Scenarios:</span>
+        <span className="text-[10px] text-zinc-600 uppercase tracking-wider mr-1">Quick Scenarios:</span>
         {PRESET_INTENTS.map((p) => (
           <button
             key={p.label}
             type="button"
             onClick={() => setCustomIntent(p.intent)}
-            className="px-2 py-0.5 rounded bg-[#0A0F1D] hover:bg-slate-800 border border-slate-800 text-[10px] text-slate-400 hover:text-slate-200 transition-colors"
+            className="px-2 py-0.5 rounded bg-zinc-950 hover:bg-slate-800 border border-white/10 text-[10px] text-zinc-500 hover:text-zinc-200 transition-colors"
           >
             {p.label}
           </button>
@@ -131,13 +131,13 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
           value={customIntent}
           onChange={(e) => setCustomIntent(e.target.value)}
           placeholder="Natural language buyer intent (e.g. Procure 2 ergonomic mouse pads)..."
-          className="flex-1 bg-[#0A0F1D] border border-slate-800 text-slate-200 px-3 py-2 rounded text-xs focus:outline-none focus:border-[#3395FF] font-mono"
+          className="flex-1 bg-zinc-950 border border-white/10 text-zinc-200 px-3 py-2 rounded text-xs focus:outline-none focus:border-white/30 font-mono"
           disabled={isRunning}
         />
         <button
           type="submit"
           disabled={isRunning || !customIntent.trim()}
-          className="flex items-center gap-1.5 px-4 py-2 rounded bg-[#3395FF] hover:bg-[#2080ee] text-white text-xs font-bold font-sans uppercase tracking-wider transition-colors disabled:opacity-50 shadow-lg shadow-[#3395FF]/20"
+          className="flex items-center gap-1.5 px-4 py-2 rounded bg-white hover:bg-[#2080ee] text-white text-xs font-bold font-sans uppercase tracking-wider transition-colors disabled:opacity-50 shadow-lg shadow-[#3395FF]/20"
         >
           <Play className="w-3.5 h-3.5 fill-current" />
           <span>{isRunning ? 'Shopping...' : 'Dispatch AI'}</span>
@@ -145,22 +145,22 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
       </form>
 
       {/* Live Terminal & Reasoning Trace */}
-      <div className="bg-[#05070A] border border-slate-900 rounded p-3 font-mono text-[11px] space-y-1.5 max-h-[220px] overflow-y-auto">
-        <div className="text-slate-500 text-[10px] uppercase tracking-wider pb-1 border-b border-slate-900 flex justify-between">
+      <div className="bg-black border border-slate-900 rounded p-3 font-mono text-[11px] space-y-1.5 max-h-[220px] overflow-y-auto">
+        <div className="text-zinc-600 text-[10px] uppercase tracking-wider pb-1 border-b border-slate-900 flex justify-between">
           <span>Trace Log & Security Guardrails</span>
-          <span>Engine: {buyerResult?.buyer_engine || (forceFallback ? 'RULE_FALLBACK' : 'GROQ_OR_FALLBACK')}</span>
+          <span>Engine: {buyerResult?.buyer_engine || (forceFallback ? 'RULE_FALLBACK' : 'NVIDIA_NIM_OR_FALLBACK')}</span>
         </div>
 
         {isRunning && (
-          <div className="text-[#3395FF] flex items-center gap-2 py-2">
-            <span className="w-2 h-2 rounded-full bg-[#3395FF] animate-ping"></span>
+          <div className="text-white flex items-center gap-2 py-2">
+            <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
             <span>Parsing procurement objective & querying Agent-Readable Catalog Spec...</span>
           </div>
         )}
 
         {buyerResult ? (
           <>
-            <p className="text-[#3395FF]">&gt; Intent: "{buyerResult.intent}"</p>
+            <p className="text-white">&gt; Intent: "{buyerResult.intent}"</p>
             {buyerResult.fallback_used && (
               <p className="text-amber-400">
                 &gt; [Invariant 5 Triggered] {buyerResult.fallback_reason || 'Autonomous rule-based fallback engaged'}
@@ -168,26 +168,26 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
             )}
 
             {buyerResult.tool_steps && buyerResult.tool_steps.map((step, idx) => (
-              <p key={idx} className="text-slate-400">
+              <p key={idx} className="text-zinc-500">
                 &gt; Action: <span className="text-emerald-400">{step.tool}</span>({JSON.stringify(step.args)})
               </p>
             ))}
 
             {buyerResult.checkout ? (
-              <div className="mt-2 pt-2 border-t border-slate-800 text-slate-300">
+              <div className="mt-2 pt-2 border-t border-white/10 text-zinc-300">
                 <p className="text-emerald-400 font-bold">
                   &gt; Gate Accepted: {buyerResult.checkout.qty}x {buyerResult.checkout.item_name} ({buyerResult.checkout.sku})
                 </p>
-                <p className="text-slate-300">
+                <p className="text-zinc-300">
                   &gt; Canonical Unit Price: ₹{buyerResult.checkout.unit_price_inr.toFixed(2)} | Total: ₹{buyerResult.checkout.total_amount_inr.toFixed(2)}
                 </p>
-                <p className="text-slate-400 text-[10px]">
-                  &gt; Razorpay Simulated Order: <span className="text-slate-200">{buyerResult.checkout.razorpay_order_id}</span>
+                <p className="text-zinc-500 text-[10px]">
+                  &gt; Razorpay Simulated Order: <span className="text-zinc-200">{buyerResult.checkout.razorpay_order_id}</span>
                 </p>
-                <p className="text-slate-400 text-[10px]">
+                <p className="text-zinc-500 text-[10px]">
                   &gt; Razorpay Simulated Payment: <span className="text-emerald-400">{buyerResult.checkout.razorpay_payment_id}</span>
                 </p>
-                <div className="mt-1.5 grid grid-cols-2 gap-1 text-[10px] text-slate-400">
+                <div className="mt-1.5 grid grid-cols-2 gap-1 text-[10px] text-zinc-500">
                   {buyerResult.checkout.rules_verified.map((r) => (
                     <div key={r.step} className="flex items-center gap-1">
                       <span className="text-emerald-400">[✓]</span>
@@ -197,9 +197,9 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
                 </div>
               </div>
             ) : buyerResult.status === 'REJECTED' || buyerResult.status === 'ERROR' ? (
-              <div className="mt-2 pt-2 border-t border-slate-800 text-red-400">
+              <div className="mt-2 pt-2 border-t border-white/10 text-red-400">
                 <p className="font-bold">&gt; [GATE REJECTION] {buyerResult.message}</p>
-                <p className="text-slate-500 text-[10px]">&gt; Audit log entry written with status REJECTED.</p>
+                <p className="text-zinc-600 text-[10px]">&gt; Audit log entry written with status REJECTED.</p>
               </div>
             ) : null}
           </>

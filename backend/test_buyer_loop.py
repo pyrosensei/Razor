@@ -1,10 +1,12 @@
 import os
 from fastapi.testclient import TestClient
+from fastapi import HTTPException
 from sqlmodel import Session, select
 from backend.main import app
 from backend.database import get_session, engine
 from backend.models import AuditLog, BuyerSession, Order, CatalogItem
 from backend.buyer import TOOLS_DEFINITION
+from backend.gate import unlock_price_for_sku
 
 client = TestClient(app)
 
@@ -98,8 +100,35 @@ def test_buyer_run_env_var_fallback():
     finally:
         os.environ.pop("SIMULATE_GROQ_DOWN", None)
 
+def test_system_reset_audit_trail_preservation():
+    """Verifies that /api/reset wipes state but successfully writes a system_reset audit log."""
+    client = TestClient(app)
+    res = client.post("/api/reset")
+    assert res.status_code == 200
+    with Session(engine) as session:
+        reset_log = session.exec(select(AuditLog).where(AuditLog.event_type == "system_reset")).first()
+        assert reset_log is not None
+        assert reset_log.status == "SUCCESS"
+        assert reset_log.action == "system_reset"
+
+def test_unlock_price_sku_not_found_audit():
+    """Verifies that attempting to unlock a fake SKU writes a REJECTED audit log before 404ing."""
+    with Session(engine) as session:
+        try:
+            unlock_price_for_sku(session, "FAKE-SKU-999")
+            assert False, "Should have raised HTTPException 404"
+        except HTTPException as e:
+            assert e.status_code == 404
+        not_found_log = session.exec(
+            select(AuditLog).where(AuditLog.event_type == "price_unlock").where(AuditLog.reason == "sku_not_found")
+        ).first()
+        assert not_found_log is not None
+        assert not_found_log.status == "REJECTED"
+
 if __name__ == "__main__":
     test_tool_definitions_schema_invariant()
     test_buyer_run_fallback_simulation()
     test_buyer_run_env_var_fallback()
+    test_system_reset_audit_trail_preservation()
+    test_unlock_price_sku_not_found_audit()
     print("\nALL BUYER TESTS PASSED SUCCESSFULLY!")

@@ -14,14 +14,14 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
   onRefresh,
 }) => {
   return (
-    <div className="bg-[#080B14] p-6 flex flex-col h-full border-t lg:border-t-0 lg:border-l border-slate-800">
+    <div className="bg-zinc-950 p-6 flex flex-col h-full border-t lg:border-t-0 lg:border-l border-white/10">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest">
+          <h2 className="text-sm font-bold text-zinc-300 uppercase tracking-widest">
             Deterministic Audit Log
           </h2>
-          <p className="text-[10px] text-slate-500 font-mono mt-0.5">
+          <p className="text-[10px] text-zinc-600 font-mono mt-0.5">
             Invariant 4: Every lock, reject, block & capture writes one immutable row
           </p>
         </div>
@@ -32,7 +32,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
           <button
             onClick={onRefresh}
             disabled={isLoading}
-            className="p-1 rounded border border-slate-800 hover:border-slate-700 bg-slate-900 text-slate-400 hover:text-slate-200 transition-colors"
+            className="p-1 rounded border border-white/10 hover:border-white/20 bg-slate-900 text-zinc-500 hover:text-zinc-200 transition-colors"
             title="Refresh Audit Trail"
           >
             <History className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
@@ -43,7 +43,7 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
       {/* Stream List */}
       <div className="flex-1 space-y-2.5 overflow-y-auto max-h-[580px] pr-1">
         {logs.length === 0 ? (
-          <div className="p-8 text-center text-slate-600 font-mono text-xs border border-dashed border-slate-800 rounded">
+          <div className="p-8 text-center text-slate-600 font-mono text-xs border border-dashed border-white/10 rounded">
             No audit records captured yet.
           </div>
         ) : (
@@ -54,8 +54,8 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
             const isLock = log.action.includes('LOCK');
 
             let cardBg = 'bg-[#0A1224]';
-            let borderColor = 'border-slate-700';
-            let badgeColor = 'text-slate-400';
+            let borderColor = 'border-white/20';
+            let badgeColor = 'text-zinc-500';
 
             if (isAttack) {
               cardBg = 'bg-[#1A0B0B]';
@@ -71,8 +71,8 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
               badgeColor = 'text-emerald-400';
             } else if (isLock) {
               cardBg = 'bg-[#0A1224]';
-              borderColor = 'border-[#3395FF]';
-              badgeColor = 'text-[#3395FF]';
+              borderColor = 'border-white/30';
+              badgeColor = 'text-white';
             }
 
             const timeStr = log.timestamp
@@ -96,34 +96,34 @@ export const AuditLogViewer: React.FC<AuditLogViewerProps> = ({
                     ) : isSuccess ? (
                       <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                     ) : (
-                      <Shield className="w-3 h-3 text-slate-400" />
+                      <Shield className="w-3 h-3 text-zinc-500" />
                     )}
                     [{log.action}]
                   </span>
-                  <span className="text-slate-500 font-mono">{timeStr}</span>
+                  <span className="text-zinc-600 font-mono">{timeStr}</span>
                 </div>
 
                 {log.razorpay_payment_id ? (
-                  <p className="text-xs text-slate-200 mb-1 font-mono">
+                  <p className="text-xs text-zinc-200 mb-1 font-mono">
                     <span className="text-emerald-400 font-semibold">{log.razorpay_payment_id}</span>
-                    <span className="text-slate-500"> // Captured</span>
+                    <span className="text-zinc-600"> // Captured</span>
                   </p>
                 ) : (
-                  <p className="text-xs text-slate-300 mb-1 font-mono leading-tight">
+                  <p className="text-xs text-zinc-300 mb-1 font-mono leading-tight">
                     {log.reason}
                   </p>
                 )}
 
-                <div className="flex flex-wrap gap-2 text-[9px] text-slate-500 font-mono uppercase tracking-tighter pt-0.5">
-                  {log.sku && <span>SKU: <strong className="text-slate-400">{log.sku}</strong></span>}
+                <div className="flex flex-wrap gap-2 text-[9px] text-zinc-600 font-mono uppercase tracking-tighter pt-0.5">
+                  {log.sku && <span>SKU: <strong className="text-zinc-500">{log.sku}</strong></span>}
                   {log.qty !== null && log.qty !== undefined && (
-                    <span>QTY: <strong className="text-slate-400">{log.qty}</strong></span>
+                    <span>QTY: <strong className="text-zinc-500">{log.qty}</strong></span>
                   )}
                   {log.amount_inr !== null && log.amount_inr !== undefined && (
                     <span>AMT: <strong className="text-emerald-400">₹{log.amount_inr.toFixed(2)}</strong></span>
                   )}
                   {log.razorpay_order_id && (
-                    <span>ORDER: <strong className="text-slate-400">{log.razorpay_order_id}</strong></span>
+                    <span>ORDER: <strong className="text-zinc-500">{log.razorpay_order_id}</strong></span>
                   )}
                 </div>
 
