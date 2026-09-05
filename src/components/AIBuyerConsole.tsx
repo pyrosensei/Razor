@@ -3,7 +3,7 @@ import { Bot, Play, ShieldAlert, Cpu, Sparkles, AlertTriangle, CheckCircle2, Che
 import { BuyerRunResult, SpendMandate } from '../types';
 
 interface AIBuyerConsoleProps {
-  onRunBuyer: (intent: string, forceFallback: boolean, groqApiKey: string) => void;
+  onRunBuyer: (intent: string, forceFallback: boolean, nimApiKey: string) => void;
   isRunning: boolean;
   buyerResult: BuyerRunResult | null;
   mandate: SpendMandate | null;
@@ -24,13 +24,13 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
 }) => {
   const [customIntent, setCustomIntent] = useState<string>(PRESET_INTENTS[0].intent);
   const [forceFallback, setForceFallback] = useState<boolean>(false);
-  const [groqApiKey, setGroqApiKey] = useState<string>('');
+  const [nimApiKey, setNimApiKey] = useState<string>('');
   const [showConfig, setShowConfig] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customIntent.trim() || isRunning) return;
-    onRunBuyer(customIntent, forceFallback, groqApiKey);
+    onRunBuyer(customIntent, forceFallback, nimApiKey);
   };
 
   return (
@@ -100,8 +100,8 @@ export const AIBuyerConsole: React.FC<AIBuyerConsoleProps> = ({
             </label>
             <input
               type="password"
-              value={groqApiKey}
-              onChange={(e) => setGroqApiKey(e.target.value)}
+              value={nimApiKey}
+              onChange={(e) => setNimApiKey(e.target.value)}
               placeholder="nvapi-..."
               className="w-full bg-black border border-white/10 text-zinc-200 px-3 py-1 rounded text-xs focus:outline-none focus:border-white/30 font-mono"
             />

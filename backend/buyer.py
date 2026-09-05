@@ -10,12 +10,15 @@ from sqlmodel import Session, select
 from backend.models import CatalogItem, SpendMandate, AuditLog, BuyerSession, Order
 from backend.gate import lock_price_for_sku, process_checkout_gate, log_audit
 
-GROQ_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-DEFAULT_GROQ_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
+NVIDIA_NIM_API_URL = os.environ.get("NVIDIA_NIM_API_URL", "https://integrate.api.nvidia.com/v1/chat/completions")
+DEFAULT_NVIDIA_NIM_MODEL = os.environ.get("NVIDIA_NIM_MODEL", "nvidia/nemotron-3.5-lightning-30b-a3b")
+# Backward-compatible aliases
+GROQ_API_URL = NVIDIA_NIM_API_URL
+DEFAULT_GROQ_MODEL = DEFAULT_NVIDIA_NIM_MODEL
 MAX_AGENT_TURNS = 6
 
 # -----------------------------------------------------------------------------
-# Section 6: Groq Function-Calling Tool Definitions
+# Section 6: NVIDIA NIM Function-Calling Tool Definitions (OpenAI-compatible)
 # INVARIANT: create_checkout's schema must NOT include a price or discount field.
 # -----------------------------------------------------------------------------
 TOOLS_DEFINITION = [
@@ -181,7 +184,7 @@ def run_rule_based_fallback_buyer(
         action="fallback_triggered",
         event_type="fallback_triggered",
         status="TRIGGERED",
-        reason=f"Fallback triggered: {reason_trigger}. Groq LLM unavailable or offline. Engaging deterministic rule-based buyer under mandate.",
+        reason=f"Fallback triggered: {reason_trigger}. NVIDIA NIM LLM unavailable or offline. Engaging deterministic rule-based buyer under mandate.",
         payload_snapshot=json.dumps({
             "intent": intent,
             "trigger": reason_trigger,
@@ -216,7 +219,7 @@ def run_rule_based_fallback_buyer(
             "turn": 1,
             "phase": "observe",
             "timestamp": datetime.datetime.utcnow().isoformat(),
-            "content": f"Groq API unreachable ({reason_trigger}). Triggering Invariant 5 deterministic rule-based fallback buyer. Remaining budget: ₹{remaining_budget_paise/100:.2f} ({remaining_budget_paise} paise)."
+            "content": f"NVIDIA NIM API unreachable ({reason_trigger}). Triggering Invariant 5 deterministic rule-based fallback buyer. Remaining budget: ₹{remaining_budget_paise/100:.2f} ({remaining_budget_paise} paise)."
         }
     ]
 
@@ -423,33 +426,47 @@ async def run_ai_buyer(
     spend_limit_paise: Optional[int] = None,
     persona: Optional[str] = None,
     buyer_session_id: Optional[str] = None,
+    nvidia_nim_api_key: Optional[str] = None,
     groq_api_key: Optional[str] = None,
     force_fallback: bool = False,
+    simulate_offline: bool = False,
     simulate_groq_down: bool = False
 ) -> Dict[str, Any]:
     """
     Executes the autonomous Buyer Agent observe->reason->act loop (max 6 turns).
-    Per Section 6 of aisle-backend-architecture.md:
-    1. Uses Groq's function-calling with tools: search_catalog, get_item, create_checkout.
+    Per aisle architecture:
+    1. Uses NVIDIA NIM function-calling (OpenAI-compatible) with tools: search_catalog, get_item, create_checkout.
     2. create_checkout schema strictly excludes price/discount fields.
     3. Runs up to 6 turns, logging every step to transcript.
-    4. If Groq call throws or times out, engages Invariant 5 rule-based fallback.
+    4. If NVIDIA NIM call throws or times out, engages Invariant 5 rule-based fallback.
     """
-    api_key = groq_api_key or os.environ.get("NVIDIA_NIM_API_KEY", "").strip() or os.environ.get("GROQ_API_KEY", "").strip()
+    api_key = (
+        nvidia_nim_api_key
+        or groq_api_key
+        or os.environ.get("NVIDIA_NIM_API_KEY", "").strip()
+        or os.environ.get("GROQ_API_KEY", "").strip()
+    )
 
-    # Check simulation flags for Groq down (env vars or request flags)
-    is_down_simulated = (
-        force_fallback
-        or simulate_groq_down
+    # Check simulation flags for LLM down (env vars or request flags)
+    groq_flag_active = (
+        simulate_groq_down
         or (os.environ.get("SIMULATE_GROQ_DOWN", "").lower() in ("1", "true", "yes"))
         or (os.environ.get("GROQ_SIMULATE_DOWN", "").lower() in ("1", "true", "yes"))
     )
+    is_down_simulated = (
+        force_fallback
+        or simulate_offline
+        or groq_flag_active
+        or (os.environ.get("SIMULATE_NVIDIA_NIM_DOWN", "").lower() in ("1", "true", "yes"))
+        or (os.environ.get("SIMULATE_LLM_DOWN", "").lower() in ("1", "true", "yes"))
+    )
 
     if is_down_simulated:
+        trigger = "SIMULATE_GROQ_DOWN_TOGGLE_ACTIVE" if groq_flag_active else "SIMULATE_NVIDIA_NIM_DOWN_TOGGLE_ACTIVE"
         return run_rule_based_fallback_buyer(
             session=session,
             intent=intent,
-            reason_trigger="SIMULATE_GROQ_DOWN_TOGGLE_ACTIVE",
+            reason_trigger=trigger,
             spend_limit_paise=spend_limit_paise,
             buyer_session_id=buyer_session_id,
             persona=persona
@@ -516,27 +533,27 @@ async def run_ai_buyer(
     }
 
     final_checkout: Optional[Dict[str, Any]] = None
-    timeout_seconds = float(os.environ.get("GROQ_TIMEOUT_SECONDS", "10.0"))
+    timeout_seconds = float(os.environ.get("NVIDIA_NIM_TIMEOUT_SECONDS") or os.environ.get("GROQ_TIMEOUT_SECONDS", "10.0"))
 
     try:
         async with httpx.AsyncClient(timeout=timeout_seconds) as client:
             for turn in range(1, MAX_AGENT_TURNS + 1):
                 payload = {
-                    "model": DEFAULT_GROQ_MODEL,
+                    "model": DEFAULT_NVIDIA_NIM_MODEL,
                     "messages": messages,
                     "tools": TOOLS_DEFINITION,
                     "tool_choice": "auto",
                     "temperature": 0.1
                 }
 
-                resp = await client.post(GROQ_API_URL, headers=headers, json=payload)
+                resp = await client.post(NVIDIA_NIM_API_URL, headers=headers, json=payload)
                 if resp.status_code != 200:
                     err_text = resp.text
                     print(f"[Aisle Buyer] NVIDIA NIM API error {resp.status_code}: {err_text}")
                     return run_rule_based_fallback_buyer(
                         session=session,
                         intent=intent,
-                        reason_trigger=f"Groq API HTTP {resp.status_code}: {err_text[:100]}",
+                        reason_trigger=f"NVIDIA NIM API HTTP {resp.status_code}: {err_text[:100]}",
                         spend_limit_paise=effective_spend_limit,
                         buyer_session_id=effective_session_id,
                         persona=effective_persona
@@ -622,18 +639,18 @@ async def run_ai_buyer(
         return run_rule_based_fallback_buyer(
             session=session,
             intent=intent,
-            reason_trigger=f"Groq network/timeout exception ({type(e).__name__}): {str(e)}",
+            reason_trigger=f"NVIDIA NIM network/timeout exception ({type(e).__name__}): {str(e)}",
             spend_limit_paise=effective_spend_limit,
             buyer_session_id=effective_session_id,
             persona=effective_persona
         )
 
     if not final_checkout:
-        # If Groq loop finished turns without making a purchase, engage fallback to complete purchase
+        # If NVIDIA NIM loop finished turns without making a purchase, engage fallback to complete purchase
         return run_rule_based_fallback_buyer(
             session=session,
             intent=intent,
-            reason_trigger="Groq loop reached max turns without checkout capture",
+            reason_trigger="NVIDIA NIM loop reached max turns without checkout capture",
             spend_limit_paise=effective_spend_limit,
             buyer_session_id=effective_session_id,
             persona=effective_persona
@@ -646,7 +663,7 @@ async def run_ai_buyer(
     return {
         "mode": "NVIDIA_NIM_LLM",
         "status": "COMPLETED",
-        "buyer_engine": f"NVIDIA NIM Autonomous Tool Calling ({DEFAULT_GROQ_MODEL})",
+        "buyer_engine": f"NVIDIA NIM Autonomous Tool Calling ({DEFAULT_NVIDIA_NIM_MODEL})",
         "intent": intent,
         "persona": effective_persona,
         "buyer_session_id": effective_session_id,

@@ -11,17 +11,20 @@ from sqlmodel import Session, select
 from backend.models import CatalogItem, AuditLog, RejectedCatalogItem
 from backend.inr_parser import parse_inr_price_to_paise
 
-GROQ_API_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-DEFAULT_GROQ_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
+NVIDIA_NIM_API_URL = os.environ.get("NVIDIA_NIM_API_URL", "https://integrate.api.nvidia.com/v1/chat/completions")
+DEFAULT_NVIDIA_NIM_MODEL = os.environ.get("NVIDIA_NIM_MODEL", "nvidia/nemotron-3.5-lightning-30b-a3b")
+# Backward-compatible aliases
+GROQ_API_URL = NVIDIA_NIM_API_URL
+DEFAULT_GROQ_MODEL = DEFAULT_NVIDIA_NIM_MODEL
 
 # ==============================================================================
 # INVARIANT 1 & REQUIREMENT 6 CODE PATH SEPARATION PROOF:
 #
-# Groq may ONLY be used to:
+# NVIDIA NIM (Nemotron) may ONLY be used to:
 #   1. Map messy column headers to (title, price, sku, stock)
 #   2. Clean up title text
 #
-# Groq NEVER sees, touches, or parses the raw price value that gets locked.
+# The LLM NEVER sees, touches, or parses the raw price value that gets locked.
 # The raw price value flows directly and exclusively into `parse_inr_price_to_paise()`,
 # which is a 100% local, deterministic rule-based Python function.
 # ==============================================================================
@@ -115,13 +118,13 @@ def map_column_headers_with_rules(headers: List[str]) -> Dict[str, Optional[str]
     return mapping
 
 
-def map_headers_with_groq(headers: List[str], groq_api_key: str) -> Dict[str, Optional[str]]:
+def map_headers_with_nim(headers: List[str], api_key: str) -> Dict[str, Optional[str]]:
     """
-    Uses Groq LLM EXCLUSIVELY to map messy column headers to (title, price, sku, stock).
+    Uses NVIDIA NIM (Nemotron) LLM EXCLUSIVELY to map messy column headers to (title, price, sku, stock).
     
     SECURITY INVARIANT:
-    Only header strings (column names) are passed to Groq.
-    ZERO ROW DATA and ZERO RAW PRICE VALUES are ever sent to Groq.
+    Only header strings (column names) are passed to the model.
+    ZERO ROW DATA and ZERO RAW PRICE VALUES are ever sent to the LLM.
     """
     system_prompt = (
         "You are a strict CSV column header classifier for merchant catalogs. "
@@ -133,7 +136,7 @@ def map_headers_with_groq(headers: List[str], groq_api_key: str) -> Dict[str, Op
     user_prompt = f"CSV Headers list: {json.dumps(headers)}"
 
     payload = {
-        "model": DEFAULT_GROQ_MODEL,
+        "model": DEFAULT_NVIDIA_NIM_MODEL,
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
@@ -145,9 +148,9 @@ def map_headers_with_groq(headers: List[str], groq_api_key: str) -> Dict[str, Op
     try:
         with httpx.Client(timeout=10.0) as client:
             resp = client.post(
-                GROQ_API_URL,
+                NVIDIA_NIM_API_URL,
                 headers={
-                    "Authorization": f"Bearer {groq_api_key}",
+                    "Authorization": f"Bearer {api_key}",
                     "Content-Type": "application/json"
                 },
                 json=payload
@@ -162,17 +165,20 @@ def map_headers_with_groq(headers: List[str], groq_api_key: str) -> Dict[str, Op
                     result[field] = val if (val in headers) else None
                 return result
     except Exception as e:
-        print(f"[Aisle Ingest] Groq header mapping fallback to rule parser: {e}")
+        print(f"[Aisle Ingest] NVIDIA NIM header mapping fallback to rule parser: {e}")
     
     return map_column_headers_with_rules(headers)
 
+# Backward-compatible alias
+map_headers_with_groq = map_headers_with_nim
 
-def clean_title_with_groq(raw_title: str, groq_api_key: str) -> str:
+
+def clean_title_with_nim(raw_title: str, api_key: str) -> str:
     """
-    Uses Groq LLM ONLY to clean up messy title text (removing extraneous promo asterisks or noise).
+    Uses NVIDIA NIM (Nemotron) ONLY to clean up messy title text (removing extraneous promo asterisks or noise).
     SECURITY INVARIANT: Only the title string is passed. Never sees price values.
     """
-    if not groq_api_key or not raw_title or len(raw_title) < 4:
+    if not api_key or not raw_title or len(raw_title) < 4:
         return raw_title
 
     system_prompt = (
@@ -180,7 +186,7 @@ def clean_title_with_groq(raw_title: str, groq_api_key: str) -> str:
         "or bad formatting. Return ONLY the clean, concise product title as plain text."
     )
     payload = {
-        "model": DEFAULT_GROQ_MODEL,
+        "model": DEFAULT_NVIDIA_NIM_MODEL,
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": raw_title}
@@ -191,9 +197,9 @@ def clean_title_with_groq(raw_title: str, groq_api_key: str) -> str:
     try:
         with httpx.Client(timeout=5.0) as client:
             resp = client.post(
-                GROQ_API_URL,
+                NVIDIA_NIM_API_URL,
                 headers={
-                    "Authorization": f"Bearer {groq_api_key}",
+                    "Authorization": f"Bearer {api_key}",
                     "Content-Type": "application/json"
                 },
                 json=payload
@@ -207,18 +213,22 @@ def clean_title_with_groq(raw_title: str, groq_api_key: str) -> str:
         pass
     return raw_title
 
+# Backward-compatible alias
+clean_title_with_groq = clean_title_with_nim
+
 
 def ingest_catalog_csv(
     session: Session,
     csv_content: str,
+    nvidia_nim_api_key: Optional[str] = None,
     groq_api_key: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Full ingest pipeline enforcing Invariant 1 and Section 4 of aisle-backend-architecture.md:
     
     1. Parse CSV structure.
-    2. Column Header Mapping: Rule-based fast path, with Groq used ONLY for ambiguous headers.
-       -> GROQ NEVER SEES OR TOUCHES RAW PRICE VALUES.
+    2. Column Header Mapping: Rule-based fast path, with NVIDIA NIM used ONLY for ambiguous headers.
+       -> THE LLM NEVER SEES OR TOUCHES RAW PRICE VALUES.
     3. Iterate rows:
        - Extract raw_price cell value.
        - Pass raw_price into local deterministic rule parser `parse_inr_price_to_paise()`.
@@ -243,10 +253,10 @@ def ingest_catalog_csv(
     resolved_headers = map_column_headers_with_rules(headers)
     
     # If required columns are missing and NVIDIA NIM API key is present, use Nemotron for header mapping ONLY
-    effective_groq_key = groq_api_key or os.environ.get("NVIDIA_NIM_API_KEY") or os.environ.get("GROQ_API_KEY")
-    if (not resolved_headers.get("price") or not resolved_headers.get("title")) and effective_groq_key:
-        groq_mapped = map_headers_with_groq(headers, effective_groq_key)
-        for k, v in groq_mapped.items():
+    effective_nim_key = nvidia_nim_api_key or groq_api_key or os.environ.get("NVIDIA_NIM_API_KEY") or os.environ.get("GROQ_API_KEY")
+    if (not resolved_headers.get("price") or not resolved_headers.get("title")) and effective_nim_key:
+        nim_mapped = map_headers_with_nim(headers, effective_nim_key)
+        for k, v in nim_mapped.items():
             if v:
                 resolved_headers[k] = v
 
@@ -360,10 +370,10 @@ def ingest_catalog_csv(
         except ValueError:
             stock_int = 10
 
-        # Optional: Groq title clean if configured, strictly isolated to title text only
+        # Optional: NVIDIA NIM title clean if configured, strictly isolated to title text only
         final_title = raw_title.strip() or f"Catalog Item {derived_sku}"
-        if effective_groq_key and ("***" in final_title or len(final_title) > 60):
-            final_title = clean_title_with_groq(final_title, effective_groq_key)
+        if effective_nim_key and ("***" in final_title or len(final_title) > 60):
+            final_title = clean_title_with_nim(final_title, effective_nim_key)
 
         # Check if item with this SKU already exists
         existing_item = session.exec(select(CatalogItem).where(CatalogItem.sku == derived_sku)).first()

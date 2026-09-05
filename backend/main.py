@@ -109,8 +109,8 @@ async def upload_catalog_csv(
     Enforces Invariant 1 and Section 4 of aisle-backend-architecture.md.
     
     1. Parse CSV structure.
-    2. Column header mapping: Groq may ONLY be used to map messy headers to (title, price, sku, stock).
-       Groq NEVER sees or touches the raw price value that gets locked.
+    2. Column header mapping: NVIDIA NIM / Nemotron may ONLY be used to map messy headers to (title, price, sku, stock).
+       The LLM NEVER sees or touches the raw price value that gets locked.
     3. Deterministic rule-based INR parser parses raw_price string to unit_price_paise.
     4. On parse success: writes a locked catalog_items row with unit_price_paise + source_row_ref,
        and an audit_log row (event_type='price_lock').
@@ -118,7 +118,7 @@ async def upload_catalog_csv(
     6. Response: { locked: [...], rejected: [...], coverage: locked_count / total_count }.
     """
     csv_text = ""
-    groq_api_key = None
+    nvidia_nim_api_key = None
 
     content_type = request.headers.get("content-type", "")
 
@@ -130,12 +130,12 @@ async def upload_catalog_csv(
             csv_text = b.decode("utf-8", errors="replace")
         elif "csv" in form:
             csv_text = str(form.get("csv"))
-        groq_api_key = form.get("groq_api_key")
+        nvidia_nim_api_key = form.get("nvidia_nim_api_key") or form.get("groq_api_key")
     elif "application/json" in content_type:
         try:
             body_json = await request.json()
             csv_text = body_json.get("raw_text") or body_json.get("csv_content") or body_json.get("csv") or body_json.get("text") or ""
-            groq_api_key = body_json.get("groq_api_key")
+            nvidia_nim_api_key = body_json.get("nvidia_nim_api_key") or body_json.get("groq_api_key")
         except Exception:
             raise HTTPException(status_code=400, detail="Invalid JSON body.")
     else:
@@ -149,7 +149,8 @@ async def upload_catalog_csv(
     result = ingest_catalog_csv(
         session=session,
         csv_content=csv_text,
-        groq_api_key=groq_api_key
+        nvidia_nim_api_key=nvidia_nim_api_key,
+        groq_api_key=nvidia_nim_api_key
     )
 
     if "error" in result and not result.get("locked") and not result.get("rejected"):
@@ -445,9 +446,9 @@ async def trigger_buyer(
     session: Session = Depends(get_session)
 ):
     """
-    Runs the autonomous buyer agent per Section 6 of aisle-backend-architecture.md.
-    Accepts: { persona, spend_limit_paise, goal, simulate_groq_down, buyer_session_id, groq_api_key }
-    If Groq is unreachable or not configured, Invariant 5 triggers rule-based fallback buyer.
+    Runs the autonomous buyer agent per aisle architecture.
+    Accepts: { persona, spend_limit_paise, goal, simulate_groq_down, simulate_offline, buyer_session_id, nvidia_nim_api_key, groq_api_key }
+    If NVIDIA NIM is unreachable or not configured, Invariant 5 triggers rule-based fallback buyer.
     """
     goal = payload.get("goal") or payload.get("intent") or "Procure organic whole bean coffee for breakroom"
     persona = payload.get("persona") or "Frugal Office Manager (Cost-conscious, essentials only)"
@@ -459,9 +460,10 @@ async def trigger_buyer(
     if spend_limit_paise is None or spend_limit_paise <= 0:
         spend_limit_paise = 500000  # Default ₹5,000.00
 
-    groq_api_key = payload.get("nvidia_nim_api_key") or payload.get("groq_api_key")
-    force_fallback = payload.get("force_fallback", False) or payload.get("simulate_groq_down", False)
+    nvidia_nim_api_key = payload.get("nvidia_nim_api_key") or payload.get("groq_api_key")
+    simulate_offline = payload.get("simulate_offline", False)
     simulate_groq_down = payload.get("simulate_groq_down", False)
+    force_fallback = payload.get("force_fallback", False) or simulate_offline or simulate_groq_down
     buyer_session_id = payload.get("buyer_session_id") or payload.get("session_id")
     if not buyer_session_id:
         buyer_session_id = f"session_{secrets.token_hex(6)}"
@@ -481,8 +483,10 @@ async def trigger_buyer(
         spend_limit_paise=spend_limit_paise,
         persona=persona,
         buyer_session_id=buyer_session_id,
-        groq_api_key=groq_api_key,
+        nvidia_nim_api_key=nvidia_nim_api_key,
+        groq_api_key=nvidia_nim_api_key,
         force_fallback=force_fallback,
+        simulate_offline=simulate_offline,
         simulate_groq_down=simulate_groq_down
     )
     return result

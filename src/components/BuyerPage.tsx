@@ -64,8 +64,8 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
   const [selectedPersona, setSelectedPersona] = useState<string>(PERSONA_OPTIONS[0].name);
   const [spendLimitInr, setSpendLimitInr] = useState<number>(5000);
   const [goal, setGoal] = useState<string>(QUICK_GOALS[0].goal);
-  const [simulateGroqDown, setSimulateGroqDown] = useState<boolean>(false);
-  const [groqApiKey, setGroqApiKey] = useState<string>('');
+  const [simulateNimDown, setSimulateNimDown] = useState<boolean>(false);
+  const [nimApiKey, setNimApiKey] = useState<string>('');
   const [showSettings, setShowSettings] = useState<boolean>(false);
 
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -97,9 +97,10 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
           persona: selectedPersona,
           spend_limit_paise: spendLimitPaise,
           goal: goal.trim(),
-          simulate_groq_down: simulateGroqDown,
-          nvidia_nim_api_key: groqApiKey.trim() || undefined,
-          groq_api_key: groqApiKey.trim() || undefined,
+          simulate_offline: simulateNimDown,
+          simulate_groq_down: simulateNimDown,
+          nvidia_nim_api_key: nimApiKey.trim() || undefined,
+          groq_api_key: nimApiKey.trim() || undefined,
         }),
       });
 
@@ -170,9 +171,9 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
                 </label>
                 <input
                   type="checkbox"
-                  id="simulate-groq-down-toggle"
-                  checked={simulateGroqDown}
-                  onChange={(e) => setSimulateGroqDown(e.target.checked)}
+                  id="simulate-nim-down-toggle"
+                  checked={simulateNimDown}
+                  onChange={(e) => setSimulateNimDown(e.target.checked)}
                   className="w-4 h-4 accent-white cursor-pointer"
                 />
               </div>
@@ -187,8 +188,8 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
               </label>
               <input
                 type="password"
-                value={groqApiKey}
-                onChange={(e) => setGroqApiKey(e.target.value)}
+                value={nimApiKey}
+                onChange={(e) => setNimApiKey(e.target.value)}
                 placeholder="nvapi-..."
                 className="w-full bg-zinc-950 border border-white/10 text-zinc-200 px-3 py-1.5 rounded text-xs focus:outline-none focus:border-white/30 font-mono"
               />
@@ -312,7 +313,7 @@ export const BuyerPage: React.FC<BuyerPageProps> = ({ mandate, onRefreshData }) 
             </div>
 
             {/* Offline Simulation Banner */}
-            {simulateGroqDown && (
+            {simulateNimDown && (
               <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-start gap-2.5 text-xs text-amber-300 font-sans">
                 <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>

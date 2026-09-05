@@ -141,7 +141,7 @@ export default function App() {
   };
 
   // Run AI Buyer
-  const handleRunBuyer = async (intent: string, forceFallback: boolean, groqApiKey: string) => {
+  const handleRunBuyer = async (intent: string, forceFallback: boolean, nimApiKey: string) => {
     setIsExecutingBuyer(true);
     try {
       const res = await fetch('/api/buyer/run', {
@@ -150,8 +150,8 @@ export default function App() {
         body: JSON.stringify({
           intent,
           force_fallback: forceFallback,
-          nvidia_nim_api_key: groqApiKey || undefined,
-          groq_api_key: groqApiKey || undefined,
+          nvidia_nim_api_key: nimApiKey || undefined,
+          groq_api_key: nimApiKey || undefined,
         }),
       });
       const data = await res.json();
