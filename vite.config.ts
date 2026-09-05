@@ -26,6 +26,14 @@ export default defineConfig(() => {
           target: 'http://127.0.0.1:8001',
           changeOrigin: true,
         },
+        '/lab': {
+          target: 'http://127.0.0.1:8001',
+          changeOrigin: true,
+        },
+        '/buyer': {
+          target: 'http://127.0.0.1:8001',
+          changeOrigin: true,
+        },
       },
     },
   };

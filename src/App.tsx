@@ -113,11 +113,28 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sku, qty }),
       });
-      const data = await res.json();
-      await fetchData();
       if (!res.ok) {
-        alert(`Gate Rejection: ${data.detail || data.reason}`);
+        let errorMsg = `HTTP ${res.status}: ${res.statusText || 'Checkout Failed'}`;
+        try {
+          const data = await res.json();
+          if (data?.detail) {
+            errorMsg = typeof data.detail === 'object'
+              ? (data.detail.message || data.detail.block_reason || JSON.stringify(data.detail))
+              : String(data.detail);
+          } else if (data?.reason) {
+            errorMsg = data.reason;
+          } else if (data?.block_reason) {
+            errorMsg = data.block_reason;
+          }
+        } catch {
+          // Response body was not valid JSON (e.g. backend down or proxy 404/502)
+        }
+        await fetchData();
+        alert(`Gate Rejection: ${errorMsg}`);
+        return;
       }
+      await res.json();
+      await fetchData();
     } catch (err) {
       console.error('Error during quick checkout:', err);
     }

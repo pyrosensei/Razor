@@ -139,10 +139,24 @@ export const MerchantCatalog: React.FC<MerchantCatalogProps> = ({
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     {item.is_locked ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 text-[10px] font-semibold">
-                        <Lock className="w-2.5 h-2.5" />
-                        LOCKED
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          title="Price fixed by the deterministic gate — buyable"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 text-[10px] font-semibold"
+                        >
+                          <Lock className="w-2.5 h-2.5" />
+                          PRICE LOCKED ✓
+                        </span>
+                        {item.lock_expires_at && (
+                          new Date(item.lock_expires_at).getTime() < Date.now() ? (
+                            <span className="text-[10px] text-rose-400 font-mono">EXPIRED — re-lock</span>
+                          ) : (
+                            <span className="text-[10px] text-zinc-500 font-mono">
+                              expires in {Math.max(0, Math.round((new Date(item.lock_expires_at).getTime() - Date.now()) / 3600000))}h
+                            </span>
+                          )
+                        )}
+                      </div>
                     ) : (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded border border-amber-500/20 text-[10px] font-semibold">
                         <Unlock className="w-2.5 h-2.5" />

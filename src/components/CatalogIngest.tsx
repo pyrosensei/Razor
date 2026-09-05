@@ -347,9 +347,12 @@ export const CatalogIngest: React.FC<CatalogIngestProps> = ({
                       </td>
                       <td className="px-4 py-2 text-center text-zinc-300">{item.stock}</td>
                       <td className="px-4 py-2 text-center">
-                        <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">
+                        <span
+                          title="Price fixed by the deterministic gate — buyable"
+                          className="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded"
+                        >
                           <CheckCircle2 className="w-3 h-3" />
-                          LOCKED
+                          PRICE LOCKED ✓
                         </span>
                       </td>
                       <td className="px-4 py-2 text-right">

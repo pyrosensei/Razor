@@ -98,6 +98,8 @@ def get_rejected_items(session: Session = Depends(get_session)):
 
 @app.post("/catalog/upload")
 @app.post("/api/catalog/upload")
+@app.post("/catalog/ingest")
+@app.post("/api/catalog/ingest")
 async def upload_catalog_csv(
     request: Request,
     session: Session = Depends(get_session)
@@ -132,7 +134,7 @@ async def upload_catalog_csv(
     elif "application/json" in content_type:
         try:
             body_json = await request.json()
-            csv_text = body_json.get("csv_content") or body_json.get("csv") or ""
+            csv_text = body_json.get("raw_text") or body_json.get("csv_content") or body_json.get("csv") or body_json.get("text") or ""
             groq_api_key = body_json.get("groq_api_key")
         except Exception:
             raise HTTPException(status_code=400, detail="Invalid JSON body.")
@@ -612,6 +614,18 @@ async def trigger_lab_attack(
             session.commit()
             session.refresh(lab_sess)
         payload["buyer_session_id"] = sess_id
+
+        # Ensure target item is locked so Rule 1 & 2 pass and Rule 3 (spend limit) is tested
+        target_sku = payload.get("sku") or spec.get("target_sku")
+        if target_sku:
+            target_item = session.exec(select(CatalogItem).where(CatalogItem.sku == target_sku)).first()
+            if target_item and not target_item.is_locked:
+                target_item.is_locked = True
+                target_item.locked_price_paisa = target_item.price_paisa
+                target_item.unit_price_paise = target_item.price_paisa
+                target_item.lock_expires_at = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
+                session.add(target_item)
+                session.commit()
 
     elif attack_type == "oversell":
         sku = payload.get("sku", "SKU-COFFEE-ROAST")

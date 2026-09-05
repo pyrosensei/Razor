@@ -324,6 +324,14 @@ def process_checkout_gate(session: Session, raw_payload: Dict[str, Any]) -> Dict
 
         # Check lock expiry if set
         if item.lock_expires_at and item.lock_expires_at < datetime.datetime.utcnow():
+            log_audit(
+                session=session,
+                action="price_unlock",
+                event_type="price_unlock",
+                status="REJECTED",
+                sku=sku,
+                reason="lock_expired: 24h TTL elapsed; price authority requires re-lock"
+            )
             item.is_locked = False
             item.locked_price_paisa = None
             item.unit_price_paise = None
